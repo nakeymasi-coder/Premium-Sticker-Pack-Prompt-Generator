@@ -1,0 +1,4497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Premium Sticker Pack Prompt Generator</title>
+<style>
+:root{
+  --pink:#f6d365;
+  --hot:#ffd700;
+  --purple:#123dff;
+  --blue:#0047ff;
+  --gold:#ffd700;
+  --black:#02030a;
+  --white:#ffffff;
+  --royal:#0047ff;
+  --deepBlue:#001a66;
+  --glowGold:rgba(255,215,0,.72);
+  --glowBlue:rgba(0,71,255,.62);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(255,215,0,.30), transparent 32%),
+    radial-gradient(circle at top right, rgba(0,71,255,.48), transparent 42%),
+    radial-gradient(circle at bottom, rgba(255,215,0,.18), transparent 34%),
+    linear-gradient(135deg,#00114d 0%,#02030a 52%,#000814 100%);
+  color:#fff;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-2;
+  background:
+    linear-gradient(115deg, transparent 0%, rgba(255,215,0,.10) 22%, transparent 42%),
+    linear-gradient(245deg, transparent 0%, rgba(0,71,255,.14) 28%, transparent 55%);
+  animation:luxurySweep 9s ease-in-out infinite alternate;
+}
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.95) 0 1px, transparent 2px),
+    radial-gradient(circle, rgba(255,215,0,.75) 0 1px, transparent 2px),
+    radial-gradient(circle, rgba(0,115,255,.80) 0 1px, transparent 2px);
+  background-size:120px 120px, 180px 180px, 240px 240px;
+  background-position:0 0, 60px 80px, 120px 40px;
+  opacity:.45;
+  animation:sparkleDrift 18s linear infinite;
+}
+.wrap{max-width:1220px;margin:auto;padding:22px}
+.hero{
+  border:3px solid rgba(255,255,255,.22);
+  background:linear-gradient(135deg,rgba(255,63,183,.28),rgba(141,53,255,.22),rgba(0,0,0,.76));
+  border-radius:28px;
+  padding:24px;
+  box-shadow:0 0 35px rgba(255,63,183,.35);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero:before{
+  content:"✨ PREMIUM STICKER • STICKER PACK ELEMENTS • PLASTIC MOCKUP • ETSY THUMBNAIL • ";
+  position:absolute;
+  top:10px;
+  left:-10%;
+  width:140%;
+  color:rgba(255,209,102,.22);
+  font-weight:900;
+  letter-spacing:7px;
+  font-size:18px;
+  white-space:nowrap;
+  animation:marq 18s linear infinite;
+}
+@keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+h1{
+  margin:22px 0 8px;
+  font-size:clamp(34px,6vw,76px);
+  line-height:.95;
+  text-transform:uppercase;
+  color:var(--pink);
+  text-shadow:4px 4px 0 #000, 7px 7px 0 var(--purple), 0 0 18px rgba(255,255,255,.45);
+}
+.sub{font-size:18px;color:#ffe8fb;margin:0 auto 8px;max-width:850px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:14px;
+  margin-top:18px;
+}
+.card{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:20px;
+  padding:14px;
+  box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
+label{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color:#ffe8fb;
+  font-weight:900;
+  margin-bottom:8px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+select,textarea,input{
+  width:100%;
+  border:2px solid rgba(255,255,255,.22);
+  border-radius:14px;
+  padding:12px;
+  background:#12081e;
+  color:#fff;
+  font-size:15px;
+  outline:none;
+}
+textarea{min-height:95px;resize:vertical}
+.lock{
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,63,183,.16);
+  color:#fff;
+  border-radius:999px;
+  padding:5px 9px;
+  font-size:12px;
+}
+.lock.on{background:linear-gradient(90deg,var(--pink),var(--purple));}
+.buttons{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin:22px 0;
+}
+button{
+  border:0;
+  border-radius:999px;
+  padding:13px 18px;
+  font-weight:900;
+  cursor:pointer;
+  color:#07040d;
+  background:linear-gradient(90deg,var(--gold),#fff0a8);
+  box-shadow:0 0 16px rgba(255,209,102,.35);
+}
+button.secondary{background:linear-gradient(90deg,var(--pink),var(--purple));color:#fff}
+button.dark{background:#fff;color:#111}
+.output{
+  background:#07040d;
+  border:2px solid rgba(255,63,183,.45);
+  border-radius:22px;
+  padding:18px;
+  box-shadow:0 0 25px rgba(255,63,183,.25);
+}
+.output h2{margin-top:0;color:var(--gold)}
+pre, textarea.outputText{
+  white-space:pre-wrap;
+  word-wrap:break-word;
+  background:rgba(255,255,255,.06);
+  border-radius:16px;
+  padding:16px;
+  line-height:1.5;
+  min-height:180px;
+}
+textarea.outputText{
+  width:100%;
+  resize:vertical;
+  font-family:Arial, Helvetica, sans-serif;
+  overflow:auto;
+}
+details{
+  background:rgba(255,255,255,.07);
+  border-radius:16px;
+  padding:12px;
+}
+summary{cursor:pointer;font-weight:900;color:var(--gold)}
+.note{font-size:13px;color:#ffd8f4}
+.previewTags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-top:14px;
+}
+.tag{
+  border-radius:999px;
+  padding:8px 12px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);
+  color:#ffe8fb;
+  font-weight:800;
+  font-size:13px;
+}
+.float{
+  position:fixed;
+  right:16px;
+  bottom:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  z-index:10;
+}
+.float button{width:46px;height:46px;padding:0}
+
+.multiWrap{
+  margin-top:18px;
+}
+.multiGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:14px;
+}
+.checkList{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:7px;
+  max-height:260px;
+  overflow:auto;
+  padding-right:4px;
+}
+.checkItem{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  font-size:13px;
+}
+.checkItem input{width:auto}
+.miniBtn{
+  padding:8px 10px;
+  font-size:12px;
+  margin:2px;
+}
+
+.bannerColorGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:10px;
+  margin-top:10px;
+}
+.bannerColorGrid input[type="color"]{
+  height:48px;
+  padding:4px;
+  cursor:pointer;
+}
+.hidden{display:none!important}
+.modeTip{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(255,209,102,.12);
+  border:1px solid rgba(255,209,102,.35);
+  color:#fff4bd;
+  font-weight:800;
+  font-size:13px;
+  line-height:1.4;
+}
+.card.dimmed{
+  opacity:.42;
+  filter:saturate(.6);
+}
+.card.dimmed:after{
+  content:"Ignored for this mode";
+  display:block;
+  margin-top:8px;
+  color:#ffd166;
+  font-size:12px;
+  font-weight:900;
+}
+
+.poseBuilderCard{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:14px;box-shadow:0 8px 25px rgba(0,0,0,.22)}
+.poseBuilderCard h3{margin:0 0 10px;color:var(--gold);text-shadow:1px 1px 0 #000}.poseBuilderCard .slotFields{display:grid;grid-template-columns:1fr;gap:10px}.poseBuilderCard label{margin-bottom:4px}.poseSlotDetails{min-height:64px}.poseBuilderIntro{grid-column:1/-1;background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.35);border-radius:18px;padding:14px;color:#fff8d8;font-weight:800;line-height:1.45}
+
+
+#poseSlotBuilderSection{scroll-margin-top:18px}
+#poseSlotBuilderSection .poseBuilderCard{border:2px solid rgba(255,209,102,.28)}
+#poseSlotBuilderSection select,#poseSlotBuilderSection textarea{border-color:rgba(255,209,102,.35)}
+
+.creationPosePair{
+  display:grid;
+  grid-template-columns:minmax(260px,360px) minmax(360px,1fr);
+  gap:14px;
+  grid-column:1/-1;
+  align-items:start;
+  margin-top:18px;
+}
+.creationPosePair > .card{margin:0;height:max-content}
+.creationPosePair #poseSlotBuilderSection{margin:0!important}
+.creationPosePair #poseSlotBuilderSection .hero{margin-top:0!important}
+.creationPosePair #posePackControls{grid-template-columns:repeat(auto-fit,minmax(230px,1fr));}
+(max-width:900px){
+  .creationPosePair{grid-template-columns:1fr;}
+}
+
+
+
+/* GlamorousGrammyGlowUp brand animation layer */
+.brandFloatLayer{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:0;
+}
+.wrap{position:relative;z-index:1}
+.floatIcon{
+  position:absolute;
+  font-size:clamp(26px,3vw,54px);
+  filter:drop-shadow(0 0 10px rgba(255,215,0,.75)) drop-shadow(0 0 18px rgba(0,71,255,.55));
+  opacity:.72;
+  animation:floatGlow 12s ease-in-out infinite;
+}
+.floatIcon:nth-child(1){left:3%;top:12%;animation-delay:0s}
+.floatIcon:nth-child(2){left:88%;top:18%;animation-delay:1.7s}
+.floatIcon:nth-child(3){left:8%;top:62%;animation-delay:3.1s}
+.floatIcon:nth-child(4){left:82%;top:68%;animation-delay:4.4s}
+.floatIcon:nth-child(5){left:48%;top:8%;animation-delay:2.6s}
+.floatIcon:nth-child(6){left:55%;top:82%;animation-delay:5.2s}
+.hero{
+  background:linear-gradient(135deg,rgba(0,71,255,.36),rgba(0,0,0,.82),rgba(255,215,0,.20));
+  border-color:rgba(255,215,0,.38);
+  box-shadow:0 0 35px rgba(0,71,255,.45), 0 0 24px rgba(255,215,0,.22), inset 0 0 24px rgba(255,255,255,.05);
+}
+.hero:before{
+  color:rgba(255,215,0,.26);
+  text-shadow:0 0 12px rgba(255,215,0,.55);
+}
+h1{
+  color:var(--gold);
+  text-shadow:4px 4px 0 #000, 7px 7px 0 var(--royal), 0 0 20px rgba(255,215,0,.62), 0 0 34px rgba(0,71,255,.55);
+  animation:titleGlow 3.2s ease-in-out infinite alternate;
+}
+.card,.output,details,.poseBuilderCard{
+  border-color:rgba(255,215,0,.25)!important;
+  background:linear-gradient(145deg,rgba(0,71,255,.13),rgba(255,255,255,.055),rgba(0,0,0,.30));
+  box-shadow:0 10px 28px rgba(0,0,0,.32), 0 0 18px rgba(0,71,255,.20);
+}
+button{
+  background:linear-gradient(90deg,#ffd700,#fff2a8,#dba900);
+  color:#03040b;
+  box-shadow:0 0 16px rgba(255,215,0,.45), inset 0 1px 0 rgba(255,255,255,.45);
+  transition:transform .22s ease, box-shadow .22s ease, filter .22s ease;
+}
+button:hover{transform:translateY(-2px) scale(1.025);box-shadow:0 0 25px rgba(255,215,0,.70),0 0 18px rgba(0,71,255,.42)}
+button.secondary{background:linear-gradient(90deg,#0047ff,#001a66,#ffd700);color:#fff;text-shadow:1px 1px 0 #000}
+button.dark{background:linear-gradient(90deg,#fff,#ffe680);color:#050505}
+select,textarea,input,pre{
+  background:#050817;
+  border-color:rgba(255,215,0,.26)!important;
+  box-shadow:inset 0 0 12px rgba(0,71,255,.16);
+}
+.lock.on{background:linear-gradient(90deg,#0047ff,#ffd700);color:#fff;text-shadow:1px 1px 0 #000}
+.float button{animation:buttonPulse 2.4s ease-in-out infinite alternate}
+@keyframes luxurySweep{from{transform:translateX(-3%) translateY(-2%);opacity:.65}to{transform:translateX(3%) translateY(2%);opacity:1}}
+@keyframes sparkleDrift{from{background-position:0 0,60px 80px,120px 40px}to{background-position:120px 180px,240px 260px,320px 220px}}
+@keyframes floatGlow{0%,100%{transform:translateY(0) rotate(-7deg) scale(1);opacity:.50}50%{transform:translateY(-34px) rotate(8deg) scale(1.12);opacity:.88}}
+@keyframes titleGlow{from{filter:drop-shadow(0 0 6px rgba(255,215,0,.40))}to{filter:drop-shadow(0 0 18px rgba(255,215,0,.88)) drop-shadow(0 0 24px rgba(0,71,255,.55))}}
+@keyframes buttonPulse{from{filter:drop-shadow(0 0 4px rgba(255,215,0,.35))}to{filter:drop-shadow(0 0 14px rgba(255,215,0,.85))}}
+@media (prefers-reduced-motion: reduce){
+  *,*:before,*:after{animation:none!important;transition:none!important}
+}
+
+</style>
+</head>
+<body>
+<div class="brandFloatLayer" aria-hidden="true">
+  <span class="floatIcon">✨</span>
+  <span class="floatIcon">💎</span>
+  <span class="floatIcon">🏷️</span>
+  <span class="floatIcon">🌟</span>
+  <span class="floatIcon">🎀</span>
+  <span class="floatIcon">👑</span>
+</div>
+
+<div class="wrap">
+  <section class="hero">
+    <h1>Premium Sticker Pack<br>Prompt Generator</h1>
+  </section>
+
+  <div class="buttons">
+    <button id="generateBtn" onclick="generatePrompt()">Generate Prompt</button>
+    <button class="secondary" onclick="generateVideoScript()">Generate Video Script</button>
+    <button class="secondary" onclick="generateMarketingContent()">Generate Marketing</button>
+    <button class="secondary" onclick="generateSunoMusic()">Generate Suno Music</button>
+    <button class="secondary" onclick="generateCustomGPTContent()">Generate Custom GPT</button>
+    <button class="secondary" onclick="randomizeOptions()">Randomize</button>
+    <button class="dark" onclick="copyPrompt()">Copy Prompt</button>
+    <button class="dark" onclick="savePrompt()">Save Prompt</button>
+    <button class="secondary" onclick="clearAll()">Clear All</button>
+  </div>
+
+
+  <section class="multiWrap hidden" id="poseSlotBuilderSection" style="margin-top:12px">
+    <div class="hero" style="padding:14px;margin-top:10px;border-color:rgba(255,209,102,.55);box-shadow:0 0 35px rgba(255,209,102,.25)">
+      <h2 style="margin:8px 0;color:var(--gold);text-shadow:2px 2px 0 #000">🔥 Same Character Pose Slot Builder</h2>
+      <p class="sub" style="font-size:15px">This opens BESIDE Creation Mode so you can build Pose 1, Pose 2, Pose 3, etc. with its own pose, outfit, hairstyle, prop, and custom details — while staying the SAME character.</p>
+      <p class="sub" style="font-size:14px;color:#fff8d8">Step 1: choose <b>same character pose sticker sheet</b> or <b>same character pose sticker pack mockup</b> in Creation Mode. Step 2: choose Number of Character Variations. Step 3: fill the matching slots below.</p>
+    </div>
+    <div class="multiGrid" id="posePackControls"></div>
+  </section>
+
+  <section class="grid" id="controls"></section>
+  <div id="modeTip" class="modeTip">Choose Creation Mode first: single sticker, single character, sticker pack layout, or plastic packaging mockup.</div>
+
+  <section class="multiWrap">
+    <div class="hero" style="padding:16px;margin-top:18px">
+      <h2 style="margin:8px 0;color:var(--gold);text-shadow:2px 2px 0 #000">Sticker Pack Element Selector</h2>
+      <p class="sub" style="font-size:15px">Check the exact extras you want inside the pack. Use these for men, women, sports, glam, parties, pets, holidays, business, and lifestyle packs.</p>
+    </div>
+    <div class="multiGrid" id="elementControls"></div>
+  </section>
+<section class="output" style="margin-top:18px">
+    <h2>Your Generated Prompt</h2>
+    <textarea id="promptBox" class="outputText" readonly>Choose Creation Mode, then click “Generate Prompt”.</textarea>
+  </section>
+
+  <section class="output" style="margin-top:18px">
+    <h2>Video Script</h2>
+    <textarea id="videoBox" class="outputText" readonly>Click “Generate Video Script”.</textarea>
+    <div class="buttons" style="margin:10px 0 0">
+      <button class="dark" onclick="copyBoxText('videoBox')">Copy Video Script</button>
+    </div>
+  </section>
+
+  <section class="output" style="margin-top:18px">
+    <h2>Marketing Content</h2>
+    <textarea id="marketingBox" class="outputText" readonly>Click “Generate Marketing”.</textarea>
+    <div class="buttons" style="margin:10px 0 0">
+      <button class="dark" onclick="copyBoxText('marketingBox')">Copy Marketing</button>
+    </div>
+  </section>
+
+  <section class="output" style="margin-top:18px">
+    <h2>Suno Music</h2>
+    <textarea id="sunoBox" class="outputText" readonly>Click “Generate Suno Music”.</textarea>
+    <div class="buttons" style="margin:10px 0 0">
+      <button class="dark" onclick="copyBoxText('sunoBox')">Copy Suno Music</button>
+    </div>
+  </section>
+
+  <section class="output" style="margin-top:18px">
+    <h2>Custom GPT Section</h2>
+    <textarea id="customGptBox" class="outputText" readonly>Click “Generate Custom GPT”.</textarea>
+    <div class="buttons" style="margin:10px 0 0">
+      <button class="dark" onclick="copyBoxText('customGptBox')">Copy Custom GPT</button>
+    </div>
+  </section>
+
+  <section style="margin-top:18px">
+    <details>
+      <summary>Saved Prompt History</summary>
+      <div id="historyBox" class="note" style="margin-top:12px">No saved prompts yet.</div>
+    </details>
+  </section>
+</div>
+
+<div class="float">
+  <button onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+  <button onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">↓</button>
+</div>
+
+<script>
+function getOutputText(id){
+  const box = document.getElementById(id);
+  if(!box) return "";
+  return ("value" in box) ? box.value : (box.innerText || box.textContent || "");
+}
+function setOutputText(id, text){
+  const box = document.getElementById(id);
+  if(!box) return;
+  if("value" in box) box.value = text;
+  else box.textContent = text;
+}
+function copyPlainTextOnly(text){
+  const cleanText = String(text || "");
+  const temp = document.createElement("textarea");
+  temp.value = cleanText;
+  temp.setAttribute("readonly", "");
+  temp.style.position = "fixed";
+  temp.style.top = "0";
+  temp.style.left = "0";
+  temp.style.width = "1px";
+  temp.style.height = "1px";
+  temp.style.opacity = "0";
+  temp.style.pointerEvents = "none";
+  document.body.appendChild(temp);
+  temp.focus();
+  temp.select();
+  temp.setSelectionRange(0, temp.value.length);
+  try{ document.execCommand("copy"); }catch(e){}
+  document.body.removeChild(temp);
+}
+const categories = {
+  "Creation Mode": [
+    "none",
+    "single sticker only (one isolated PNG)",
+    "single character sticker PNG",
+    "same character pose sticker sheet",
+    "same character pose sticker pack mockup",
+    "plastic packaging same character pose sticker pack",
+    "sticker pack (multiple stickers with layout)",
+    "sticker pack mockup with plastic packaging"
+  ],
+  "Art Style": [
+    "none",
+    "bold vector sticker art",
+    "Bratz-inspired glam doll style",
+    "comic-style cartoon",
+    "exaggerated chibi",
+    "glossy 3D cartoon",
+    "hyper-realistic sticker art",
+    "kawaii glam",
+    "luxury editorial cartoon",
+    "semi-chibi",
+    "soft pastel clipart",
+    "Y2K glossy doll style"
+  ],
+  "Pack Character Source": [
+    "none",
+    "create pack from generator character prompts only",
+    "no character PNGs, accessories and quotes only",
+    "use uploaded character PNGs plus generator-created accessories",
+    "use uploaded character PNGs plus matching quote stickers",
+    "use uploaded character PNGs plus quotes and accessories",
+    "use uploaded finished character PNGs exactly as provided"
+  ],
+  "Uploaded Character Count": [
+    "none",
+    "1 uploaded character PNG",
+    "2 uploaded character PNGs",
+    "3 uploaded character PNGs",
+    "4 uploaded character PNGs",
+    "5 uploaded character PNGs",
+    "6 uploaded character PNGs",
+    "7 uploaded character PNGs",
+    "8 uploaded character PNGs",
+    "9 uploaded character PNGs",
+    "10 uploaded character PNGs",
+    "12 uploaded character PNGs",
+    "15 uploaded character PNGs"
+  ],
+  "Character Placement In Pack": [
+    "none",
+    "all characters clearly separated",
+    "balanced rows inside the pouch",
+    "character PNGs arranged like premium vinyl stickers",
+    "characters arranged around the center quote",
+    "characters in top middle and bottom rows",
+    "characters mixed with lips crowns hearts and quote stickers",
+    "characters placed evenly with accessories between them",
+    "characters placed with no overlap",
+    "clean sticker sheet layout inside package",
+    "dense but readable sticker collection layout",
+    "large main character with smaller character stickers around it",
+    "mobile-readable Etsy thumbnail layout"
+  ],
+  "Website Mockup Layout": [
+    "none",
+    "sticker pack left, large character right",
+    "sticker pack right, large character left",
+    "sticker pack centered, large character behind",
+    "sticker pack bottom left, large character right",
+    "sticker pack upper left, large character lower right"
+  ],
+  "Sticker Pack Angle / Placement": [
+    "none",
+    "straight front-facing",
+    "slightly slanted left",
+    "slightly slanted right",
+    "dramatic diagonal tilt",
+    "floating tilted product mockup",
+    "angled like a product promo ad",
+    "flat lay angle",
+    "front-facing pouch with slight rotation",
+    "sticker pack leaning into the frame"
+  ],
+  "Website Mockup Background": [
+    "none",
+    "auto match selected design",
+    "custom color or gradient background"
+  ],
+  "Number of Character Variations": [
+    "none", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12", "15", "20"
+  ],
+  "Character Sticker": [
+    "none",
+    "AI prompt creator girl",
+    "airport outfit girl",
+    "baker girl",
+    "balloon pose girl",
+    "basketball girl",
+    "beach outfit girl",
+    "beauty influencer girl",
+    "birthday girl character",
+    "black dress girl",
+    "black leather baddie girl",
+    "blazer boss character",
+    "blowing kiss girl",
+    "blue tracksuit girl",
+    "book lover girl",
+    "boss babe chibi character",
+    "boutique owner girl",
+    "boxing girl",
+    "brunch bestie character",
+    "cake holding girl",
+    "camera-ready girl",
+    "cargo pants girl",
+    "cat mom girl",
+    "character with thick white kiss-cut border",
+    "cheerleader girl",
+    "chef girl",
+    "Christmas outfit girl",
+    "coffee girl",
+    "coffee shop girl",
+    "confidence pose girl",
+    "confident full-body girl",
+    "content creator girl",
+    "country concert girl",
+    "cowgirl character",
+    "curlers beauty girl",
+    "curvy doll character",
+    "cute chibi bestie character",
+    "cute face loud style character",
+    "cute shy pose girl",
+    "dance pose girl",
+    "denim shorts girl",
+    "digital product seller girl",
+    "disco party girl",
+    "dog mom girl",
+    "Etsy shop owner girl",
+    "fall fashion girl",
+    "fashion blogger girl",
+    "fashion doll girl",
+    "flower shop girl",
+    "football fan girl",
+    "full-body sticker character",
+    "garden girl",
+    "gift holding girl",
+    "girl holding handbag",
+    "girl holding kitten",
+    "girl holding puppy",
+    "girl in cozy lounge set",
+    "girl in denim outfit",
+    "girl in leather outfit",
+    "girl in sequin dress",
+    "girl with blue hair streaks",
+    "girl with braids",
+    "girl with high ponytail",
+    "girl with hoop earrings",
+    "girl with long curls",
+    "girl with messy bun",
+    "girl with side-part waves",
+    "girl with sunglasses",
+    "glossy cartoon girl",
+    "gold accessory girl",
+    "gold sequin girl",
+    "graduation girl",
+    "graphic tee girl",
+    "gym fitness girl",
+    "hairstylist girl",
+    "Halloween cute character",
+    "hands-on-hip girl",
+    "heart hands girl",
+    "heels and handbag girl",
+    "holiday sweater girl",
+    "hoodie girl",
+    "journal girl",
+    "kneeling pose character",
+    "laptop boss character",
+    "leopard outfit girl",
+    "luxury handbag girl",
+    "main character pose girl",
+    "makeup artist girl",
+    "makeup girl",
+    "medical assistant girl",
+    "microphone girl",
+    "money moves girl",
+    "music lover girl",
+    "nail tech girl",
+    "New Year party girl",
+    "nurse girl",
+    "over-the-shoulder girl",
+    "pajama cozy girl",
+    "party outfit girl",
+    "peace sign girl",
+    "pet mom girl",
+    "phone-in-hand creator girl",
+    "pink and black outfit girl",
+    "pink dress girl",
+    "pink tracksuit girl",
+    "planner girl",
+    "plant mom girl",
+    "plus-size chibi girl",
+    "purple outfit girl",
+    "queen energy character",
+    "ring light creator girl",
+    "robe self-care girl",
+    "roller skate girl",
+    "royal blue outfit girl",
+    "runway pose girl",
+    "self-care spa girl",
+    "selfie pose girl",
+    "shopping bags girl",
+    "shopping girl",
+    "single character sticker only",
+    "sitting cute girl",
+    "slipper lounge girl",
+    "small business owner girl",
+    "sneaker girl",
+    "soccer girl",
+    "soft life girl",
+    "standing pose girl",
+    "sticker boss character",
+    "streetwear girl",
+    "summer outfit girl",
+    "sunglasses attitude girl",
+    "teacher girl",
+    "tennis girl",
+    "tongue-out playful girl",
+    "track girl",
+    "travel girl",
+    "unbothered girl",
+    "urban boutique girl",
+    "Valentine heart girl",
+    "varsity jacket girl",
+    "volleyball girl",
+    "walking forward girl",
+    "waving girl",
+    "western boots girl",
+    "winter coat girl",
+    "yoga girl"
+  ],
+  "Character Sticker - Guys": [
+    "none",
+    "AI prompt creator guy",
+    "arcade gamer guy",
+    "arms-crossed guy",
+    "artist guy with paint splatter hoodie",
+    "barber fresh guy",
+    "baseball guy",
+    "basketball guy",
+    "beard care guy",
+    "birthday guy",
+    "black hoodie guy",
+    "black leather jacket guy",
+    "blue tracksuit guy",
+    "boss dude character",
+    "boss moves guy",
+    "boxing guy",
+    "business owner guy",
+    "camera creator guy",
+    "car enthusiast guy",
+    "chef guy",
+    "clean cut badge guy",
+    "coffee shop guy",
+    "college hoodie guy",
+    "content creator guy",
+    "country concert guy",
+    "cowboy boots guy",
+    "dad life guy",
+    "denim jacket guy",
+    "digital product seller guy",
+    "DJ guy",
+    "dog dad guy",
+    "entrepreneur guy",
+    "fashion blogger guy",
+    "fitness guy",
+    "football fan guy",
+    "football guy",
+    "fresh haircut guy",
+    "full-body male sticker character",
+    "gaming controller guy",
+    "glossy cartoon guy",
+    "gold chain guy",
+    "graduation guy",
+    "graphic tee guy",
+    "grillz sparkle guy",
+    "guy holding coffee",
+    "guy holding laptop",
+    "guy holding phone",
+    "guy holding shopping bag",
+    "guy in blazer",
+    "guy in denim jacket",
+    "guy in hoodie",
+    "guy in leather jacket",
+    "guy in sports jersey",
+    "guy in suit",
+    "guy in tracksuit",
+    "guy in tuxedo",
+    "guy in varsity jacket",
+    "guy with baseball cap",
+    "guy with gold chain",
+    "guy with headphones",
+    "guy with sunglasses",
+    "hands-in-pocket guy",
+    "high-top sneaker guy",
+    "hoodie and joggers guy",
+    "king energy chibi character",
+    "king status guy",
+    "laptop boss guy",
+    "luxury lifestyle guy",
+    "male character with thick white kiss-cut border",
+    "medical assistant guy",
+    "money moves guy",
+    "motorcycle helmet guy",
+    "music artist guy",
+    "MVP energy guy",
+    "nurse guy",
+    "party guy",
+    "pet dad guy",
+    "phone-in-hand creator guy",
+    "planner boss guy",
+    "plus-size chibi guy",
+    "podcast microphone guy",
+    "purple outfit guy",
+    "red carpet tux guy",
+    "ring light creator guy",
+    "roller skate guy",
+    "royal blue outfit guy",
+    "single male character sticker only",
+    "skateboard guy",
+    "slim chibi guy",
+    "sneakerhead guy",
+    "soccer guy",
+    "standing pose guy",
+    "streetwear guy",
+    "sunglasses attitude guy",
+    "teacher guy",
+    "tech laptop guy",
+    "travel airport outfit guy",
+    "truck driver guy",
+    "varsity jacket guy",
+    "walking forward guy",
+    "work from home guy"
+  ],
+  "Skin Tone": [
+    "none",
+    "almond brown skin",
+    "bronze brown skin",
+    "caramel brown skin",
+    "cinnamon brown skin",
+    "cool undertone skin",
+    "dark brown skin",
+    "deep brown skin",
+    "deep espresso skin",
+    "fair skin",
+    "freckled fair skin",
+    "golden brown skin",
+    "golden tan skin",
+    "golden undertone skin",
+    "honey brown skin",
+    "light brown skin",
+    "medium brown skin",
+    "mocha brown skin",
+    "neutral beige skin",
+    "neutral undertone skin",
+    "olive skin",
+    "peach beige skin",
+    "porcelain skin",
+    "rich cocoa skin",
+    "rosy undertone skin",
+    "sun-kissed skin",
+    "tan skin",
+    "toffee brown skin",
+    "warm beige skin",
+    "warm brown skin"
+  ],
+  "Tattoo": [
+    "none",
+    "small heart tattoo",
+    "wrist tattoo",
+    "neck tattoo",
+    "arm sleeve tattoo",
+    "forearm tattoo",
+    "hand tattoo",
+    "butterfly tattoo",
+    "rose tattoo",
+    "crown tattoo",
+    "star tattoo",
+    "script word tattoo",
+    "angel wing tattoo",
+    "money symbol tattoo",
+    "music note tattoo",
+    "tiny face tattoo",
+    "shoulder tattoo",
+    "chest tattoo",
+    "leg tattoo",
+    "glam floral tattoo",
+    "cross tattoo",
+    "tribal tattoo",
+    "small behind-the-ear tattoo",
+    "ankle tattoo",
+    "finger tattoo",
+    "full sleeve tattoo",
+    "half sleeve tattoo",
+    "minimal linework tattoo",
+    "bold black ink tattoo",
+    "colorful glam tattoo"
+  ],
+  "Adaptive / Disability Representation": [
+    "none",
+    "wheelchair user",
+    "power wheelchair user",
+    "walker user",
+    "cane user",
+    "crutches",
+    "forearm crutches",
+    "prosthetic leg",
+    "prosthetic arm",
+    "prosthetic hand",
+    "hearing aids",
+    "cochlear implant",
+    "service dog",
+    "guide dog",
+    "white cane",
+    "leg brace",
+    "arm brace",
+    "knee brace",
+    "medical alert bracelet",
+    "insulin pump",
+    "oxygen tube",
+    "adaptive fashion styling",
+    "seated confident pose",
+    "disabled but able confident representation",
+    "visible disability with glam styling"
+  ],
+  "Body Type - Girls": [
+    "none",
+    "apple-shaped body",
+    "athletic body",
+    "average body",
+    "balanced body",
+    "compact chibi body",
+    "confident glam body",
+    "curvy body",
+    "cute mini doll body",
+    "fashion doll proportions",
+    "full-body sticker proportions",
+    "full-figured body",
+    "hourglass body",
+    "natural realistic curves",
+    "pear-shaped body",
+    "petite curvy body",
+    "plus-size body",
+    "rounded chibi body",
+    "short curvy body",
+    "slim body",
+    "soft curvy body",
+    "soft plus-size body",
+    "tall curvy body",
+    "thick body",
+    "voluptuous body"
+  ],
+  "Face Style - Girls": [
+    "none",
+    "animated sticker face",
+    "big lashes doll face",
+    "bold brows glam face",
+    "boutique doll face",
+    "bratz-inspired glossy face",
+    "bright happy chibi face",
+    "calm soft-life face",
+    "clean vinyl sticker face",
+    "confident glam face",
+    "cute button-nose face",
+    "cute cartoon glam face",
+    "cute shy expression face",
+    "dimples and glossy smile face",
+    "editorial sticker face",
+    "fashion doll glam face",
+    "full glossy lips face",
+    "gentle smile face",
+    "glossy doll face",
+    "heart-shaped glossy face",
+    "high-cheekbone glam face",
+    "kawaii glam face",
+    "large round-eye chibi face",
+    "lip-gloss pout face",
+    "luxury glam makeup face",
+    "main-character glam face",
+    "natural soft-glam face",
+    "oval doll face",
+    "pink blush doll face",
+    "playful wink face",
+    "premium clipart doll face",
+    "pretty focused face",
+    "round cheeks and glossy lips",
+    "sassy side-eye glam face",
+    "smiling boss-babe face",
+    "smooth airbrushed face",
+    "soft almond-eye face",
+    "soft baby-doll face",
+    "soft confident face",
+    "soft freckles doll face",
+    "soft pouty doll face",
+    "soft round chibi face",
+    "sparkle-eyed chibi face",
+    "sparkly lash glam face",
+    "sweet heart-lips face",
+    "sweet smiling face",
+    "tiny nose glossy face",
+    "unbothered glam face",
+    "wide-eyed doll face",
+    "Y2K glossy face"
+  ],
+  "Hairstyle - Girls": [
+    "none",
+    "asymmetrical bob",
+    "beaded braids",
+    "big fluffy curls",
+    "black and blonde braids",
+    "black hair with gold streaks",
+    "blonde box braids",
+    "blonde high ponytail",
+    "blue box braids",
+    "blue-highlighted curls",
+    "blunt bob with bangs",
+    "boho knotless braids",
+    "braided crown",
+    "braided high bun",
+    "braided ponytail",
+    "braids with gold cuffs",
+    "bubble ponytail",
+    "burgundy waves",
+    "caramel-highlight curls",
+    "chestnut brown waves",
+    "copper curls",
+    "crimped Y2K hair",
+    "curly bangs and bun",
+    "curly bun with baby hairs",
+    "curly lob",
+    "curly messy bun",
+    "curly pineapple updo",
+    "curtain bangs with waves",
+    "deep wave bob",
+    "defined ringlet curls",
+    "distressed locs",
+    "double buns with curls",
+    "extra-long glam ponytail",
+    "faux hawk curls",
+    "faux locs",
+    "feed-in braids",
+    "finger waves",
+    "Fulani braids",
+    "glam Hollywood waves",
+    "goddess braids",
+    "green money-piece waves",
+    "half-up curly ponytail",
+    "half-up half-down curls",
+    "halo braid",
+    "high curly ponytail",
+    "high ponytail with swoop bang",
+    "high sleek ponytail",
+    "honey-blonde curls",
+    "honey-highlight braids",
+    "hot pink bob",
+    "jet-black pixie cut",
+    "large box braids",
+    "layered curls",
+    "loc bob",
+    "loc bun",
+    "loc ponytail",
+    "long auburn waves",
+    "long butterfly locs",
+    "long curly black hair",
+    "long loose waves",
+    "long mermaid waves",
+    "long straight hair with bangs",
+    "low chignon bun",
+    "low sleek ponytail",
+    "Marley twists",
+    "messy claw-clip updo",
+    "micro bangs bob",
+    "mohawk curls",
+    "passion twists",
+    "pigtail braids",
+    "pink knotless braids",
+    "pink-streaked black curls",
+    "platinum blonde bob",
+    "ponytail with curls",
+    "purple ombre waves",
+    "red velvet curls",
+    "retro pin curls",
+    "rose gold curls",
+    "royal blue ombre curls",
+    "Senegalese twists",
+    "short curly bob",
+    "short tapered curls",
+    "side bangs with curls",
+    "side braid",
+    "side swoop ponytail",
+    "side-part body waves",
+    "silk press middle part",
+    "silk press side part",
+    "silver glam waves",
+    "sleek straight black hair",
+    "slick bun with baby hairs",
+    "soft locs",
+    "space buns",
+    "spring twists",
+    "teal streak curls",
+    "top knot bun",
+    "tribal braids",
+    "twist-out curls",
+    "two curly puffs",
+    "undercut pixie",
+    "victory rolls",
+    "voluminous afro",
+    "waist-length braids",
+    "waist-length straight hair",
+    "wand curls",
+    "wash-and-go curls",
+    "wet-look waves"
+  ],
+  "Makeup - Girls": [
+    "none",
+    "barely-there natural glam makeup",
+    "bold cut-crease glam makeup",
+    "bronze goddess makeup",
+    "champagne shimmer makeup",
+    "clean girl soft glam makeup",
+    "deep berry lip glam makeup",
+    "dramatic full glam makeup",
+    "glitter eyelid glam makeup",
+    "gold shimmer glam makeup",
+    "glossy nude lip makeup",
+    "hot pink glam makeup",
+    "luxury editorial glam makeup",
+    "matte soft glam makeup",
+    "peachy blush glam makeup",
+    "pink blush doll makeup",
+    "purple shimmer glam makeup",
+    "red lip classic glam makeup",
+    "soft bridal glam makeup",
+    "smokey eye glam makeup",
+    "winged liner glam makeup",
+    "Y2K glossy glam makeup"
+  ],
+  "Beauty Marks - Girls": [
+    "none",
+    "beauty mark above lip",
+    "beauty mark beside left eye",
+    "beauty mark beside right eye",
+    "beauty mark on cheek",
+    "beauty mark under eye",
+    "cute freckles across cheeks",
+    "delicate nose freckles",
+    "heart-shaped beauty mark",
+    "single beauty mark near chin",
+    "soft scattered freckles",
+    "tiny star beauty mark"
+  ],
+  "Earrings - Girls": [
+    "none",
+    "big gold bamboo hoop earrings",
+    "chunky gold hoop earrings",
+    "diamond stud earrings",
+    "glitter heart earrings",
+    "gold butterfly earrings",
+    "gold door-knocker earrings",
+    "gold hoop earrings",
+    "gold nameplate earrings",
+    "large rhinestone hoop earrings",
+    "pearl drop earrings",
+    "pink heart hoop earrings",
+    "rhinestone chandelier earrings",
+    "silver hoop earrings",
+    "small gold huggie earrings",
+    "star charm earrings"
+  ],
+  "Nails - Girls": [
+    "none",
+    "almond nude glossy nails",
+    "black stiletto nails",
+    "chrome coffin nails",
+    "extra-long pink acrylic nails",
+    "French tip nails",
+    "glitter ombre nails",
+    "gold foil nails",
+    "hot pink coffin nails",
+    "luxury rhinestone nails",
+    "medium square glossy nails",
+    "metallic gold nails",
+    "pink and white swirl nails",
+    "red glossy nails",
+    "short clean glossy nails",
+    "white chrome nails"
+  ],
+  "Eyebrows - Girls": [
+    "none",
+    "arched glam brows",
+    "bold sculpted brows",
+    "clean laminated brows",
+    "defined soft glam brows",
+    "feathered natural brows",
+    "high arch brows",
+    "sharp baddie brows",
+    "soft rounded brows",
+    "thick fluffy brows",
+    "thin Y2K brows"
+  ],
+  "Lashes - Girls": [
+    "none",
+    "cat-eye lashes",
+    "dramatic 25mm lashes",
+    "full fluffy lashes",
+    "long doll lashes",
+    "natural wispy lashes",
+    "soft glam lashes",
+    "spiky manga lashes",
+    "thick volume lashes",
+    "wispy butterfly lashes"
+  ],
+  "Body Type - Guys": [
+    "none",
+    "athletic body",
+    "average body",
+    "basketball-player build",
+    "broad-shouldered body",
+    "built body",
+    "business suit body",
+    "compact chibi body",
+    "confident masculine body",
+    "cute mini doll body",
+    "dad-bod body",
+    "football-player build",
+    "full-body sticker proportions",
+    "gym-fit body",
+    "lean body",
+    "muscular body",
+    "natural realistic body",
+    "plus-size body",
+    "rounded chibi body",
+    "short body",
+    "slim body",
+    "soft chubby body",
+    "stocky body",
+    "streetwear model body",
+    "tall body"
+  ],
+  "Face Style - Guys": [
+    "none",
+    "animated sticker guy face",
+    "athletic hero face",
+    "barber fresh face",
+    "bold eyebrow face",
+    "boss dude face",
+    "bright happy guy face",
+    "business owner face",
+    "calm confident face",
+    "clean vinyl sticker face",
+    "clean-cut handsome face",
+    "comic-style handsome face",
+    "confident full-lip face",
+    "confident smirk face",
+    "cool serious face",
+    "cute button-nose guy face",
+    "cute cartoon guy face",
+    "dimples and smile face",
+    "fashion doll male face",
+    "freckled cute guy face",
+    "friendly dad-life face",
+    "gamer grin face",
+    "gentle smile guy face",
+    "glossy chibi face",
+    "high-cheekbone guy face",
+    "king energy face",
+    "luxury lifestyle face",
+    "main-character guy face",
+    "mature handsome face",
+    "music artist face",
+    "natural soft-glam guy face",
+    "oval cartoon face",
+    "playful wink guy face",
+    "premium clipart guy face",
+    "round-cheek chibi face",
+    "serious model face",
+    "sharp jawline doll face",
+    "smooth airbrushed guy face",
+    "smooth baby-face guy",
+    "soft chibi boy face",
+    "soft round guy face",
+    "soft smiling face",
+    "soft-life guy face",
+    "square jaw glam face",
+    "streetwear cool face",
+    "strong brow masculine face",
+    "sweet smiling guy face",
+    "urban cool face",
+    "wide-eyed playful face",
+    "Y2K glossy guy face"
+  ],
+  "Hairstyle - Guys": [
+    "none",
+    "afro puff ponytail",
+    "auburn curls",
+    "barber fresh waves",
+    "baseball cap hair",
+    "beanie-ready curls",
+    "beard with bald head",
+    "black and gold braids",
+    "black curls with fade",
+    "bleached curls",
+    "blonde tips",
+    "blue-highlighted curls",
+    "box braids with fade",
+    "braided bun",
+    "braided cornrows",
+    "braids with beads",
+    "burst fade",
+    "buzz cut",
+    "chestnut waves",
+    "classic caesar cut",
+    "clean bald head",
+    "clean-shaven fade",
+    "cornrows with fade",
+    "crew cut",
+    "crown-ready low fade",
+    "curly bangs",
+    "curly high top",
+    "curly mullet",
+    "curtain hair",
+    "designer part haircut",
+    "dreadhawk",
+    "drop fade",
+    "durag waves",
+    "faux hawk fade",
+    "flat top",
+    "fluffy curls",
+    "freeform locs",
+    "French crop",
+    "fresh edge-up",
+    "full beard with taper",
+    "goatee with fade",
+    "half-up locs",
+    "hard part haircut",
+    "high taper fade",
+    "high-top fade",
+    "honey-brown curls",
+    "ivy league cut",
+    "line-up haircut",
+    "loc bun",
+    "loc ponytail",
+    "locs pulled back",
+    "long wavy hair",
+    "loose curls",
+    "low bun",
+    "low taper fade",
+    "man bun",
+    "medium curls",
+    "medium twists",
+    "messy curls",
+    "messy fringe",
+    "mid taper fade",
+    "middle-part waves",
+    "mini afro",
+    "modern mullet",
+    "mohawk fade",
+    "mustache with waves",
+    "platinum buzz cut",
+    "pompadour",
+    "quiff hairstyle",
+    "red-tinted waves",
+    "rounded afro",
+    "royal blue locs",
+    "short box braids",
+    "short curls",
+    "short twists",
+    "short waves",
+    "shoulder-length locs",
+    "shoulder-length waves",
+    "side cornrows",
+    "side-swept hair",
+    "silver dyed crop",
+    "skin fade",
+    "slick side-part hair",
+    "slicked-back hair",
+    "soft wave cap look",
+    "spiky hair",
+    "sports headband curls",
+    "starter locs",
+    "straight-back cornrows",
+    "surfer waves",
+    "temp fade",
+    "textured afro",
+    "textured crop",
+    "tight coils",
+    "top knot",
+    "twist sponge curls",
+    "twist-out hair",
+    "two-strand twists",
+    "two-tone curls",
+    "undercut curls",
+    "undercut slick back",
+    "zigzag cornrows"
+  ],
+  "Pose / Action": [
+    "none",
+    "adjusting sunglasses",
+    "arms crossed confident pose",
+    "blowing a kiss",
+    "bold baddie stance",
+    "boss desk pose",
+    "both hands on hips",
+    "brunch drink pose",
+    "celebration pose",
+    "cute shy pose",
+    "dancing pose",
+    "heart hands pose",
+    "holding black quilted handbag",
+    "holding coffee cup",
+    "holding crown",
+    "holding laptop",
+    "holding lip gloss",
+    "holding makeup palette",
+    "holding nail polish bottle",
+    "holding perfume bottle",
+    "holding phone and coffee",
+    "holding pink handbag",
+    "holding planner",
+    "leaning pose",
+    "looking over shoulder",
+    "on phone pose",
+    "one hand on hip",
+    "over-the-shoulder wink",
+    "peace sign pose",
+    "pointing pose",
+    "putting on sunglasses",
+    "runway pose",
+    "selfie pose",
+    "shopping bag pose",
+    "side-step fashion pose",
+    "sitting cute pose",
+    "standing confident hands on hips",
+    "throwing glitter pose",
+    "tongue-out playful pose",
+    "walking forward pose",
+    "walking in heels",
+    "waving pose",
+    "wheelchair confident pose",
+    "power wheelchair glam pose",
+    "seated confident sticker pose",
+    "cane confident pose",
+    "walker confident pose",
+    "forearm crutches confident pose",
+    "crutches standing pose",
+    "prosthetic leg standing pose",
+    "prosthetic arm showcase pose",
+    "hearing aid visible smile pose",
+    "cochlear implant visible pose",
+    "service dog beside character pose",
+    "guide dog walking pose",
+    "white cane walking pose",
+    "leg brace confident pose",
+    "arm brace confident pose",
+    "adaptive fashion seated pose",
+    "disabled but able celebration pose",
+    "disabled but able boss pose",
+    "accessible main-character pose"
+  ],
+  "Guy Pose / Action": [
+    "none",
+    "adjusting sunglasses pose",
+    "adjusting watch pose",
+    "airport fit pose",
+    "arms open celebration pose",
+    "barber clippers pose",
+    "baseball bat pose",
+    "basketball dribble pose",
+    "basketball dunk pose",
+    "beach sunglasses pose",
+    "beard grooming pose",
+    "birthday cake pose",
+    "boss desk pose",
+    "boxing gloves up pose",
+    "boxing guard pose",
+    "buttoning blazer pose",
+    "camera vlogger pose",
+    "CEO stance pose",
+    "champion pose",
+    "cheers pose",
+    "chef pose",
+    "cologne spray pose",
+    "confetti celebration pose",
+    "cool street walk pose",
+    "cowboy hat tip pose",
+    "crouched sneaker pose",
+    "dance pose",
+    "denim jacket pose",
+    "DJ headphones pose",
+    "dog leash walking pose",
+    "fall fashion pose",
+    "finger guns pose",
+    "fist pump pose",
+    "fixing jacket collar pose",
+    "football catching pose",
+    "fresh haircut reveal pose",
+    "gaming controller pose",
+    "graduation cap pose",
+    "grillz smile pose",
+    "gym dumbbell pose",
+    "headphones gaming pose",
+    "heart hands pose",
+    "holding baseball glove pose",
+    "holding basketball pose",
+    "holding bouquet pose",
+    "holding camera pose",
+    "holding coffee cup pose",
+    "holding cologne bottle pose",
+    "holding football pose",
+    "holding gift box pose",
+    "holding gold chain pose",
+    "holding heart pose",
+    "holding laptop pose",
+    "holding money stack pose",
+    "holding phone pose",
+    "holding shopping bag pose",
+    "holding soccer ball pose",
+    "holding trophy pose",
+    "holiday sweater pose",
+    "hoodie pocket pose",
+    "king energy crown pose",
+    "leaning against wall pose",
+    "leaning on luxury car pose",
+    "leather jacket pose",
+    "lifting weights pose",
+    "mechanic wrench pose",
+    "medical worker pose",
+    "microphone performance pose",
+    "money moves pose",
+    "motorcycle helmet pose",
+    "one hand in pocket pose",
+    "party cup pose",
+    "peace sign pose",
+    "pet dad holding kitten pose",
+    "pet dad holding puppy pose",
+    "pointing at viewer pose",
+    "pointing to sneakers pose",
+    "prayer hands pose",
+    "putting on sunglasses pose",
+    "rapper hand gesture pose",
+    "ring light creator pose",
+    "roller skate pose",
+    "running pose",
+    "showing off watch pose",
+    "singing pose",
+    "sitting on stool pose",
+    "sitting relaxed pose",
+    "skateboard pose",
+    "sneaker flex pose",
+    "soccer kick pose",
+    "standing confident with arms crossed",
+    "standing full-body sticker pose",
+    "standing with hands in pockets",
+    "straightening tie pose",
+    "streetwear model pose",
+    "stretching fitness pose",
+    "suit boss pose",
+    "taking selfie pose",
+    "teacher pointer pose",
+    "texting on phone pose",
+    "thumbs up pose",
+    "tracksuit pose",
+    "travel suitcase pose",
+    "tuxedo pose",
+    "varsity jacket pose",
+    "victory pose",
+    "VIP rope pose",
+    "walking forward pose",
+    "waving pose",
+    "wheelchair confident pose",
+    "power wheelchair boss pose",
+    "seated confident sticker pose",
+    "cane confident pose",
+    "walker confident pose",
+    "forearm crutches confident pose",
+    "crutches standing pose",
+    "prosthetic leg standing pose",
+    "prosthetic arm showcase pose",
+    "hearing aid visible smile pose",
+    "cochlear implant visible pose",
+    "service dog beside character pose",
+    "guide dog walking pose",
+    "white cane walking pose",
+    "leg brace confident pose",
+    "arm brace confident pose",
+    "adaptive fashion seated pose",
+    "disabled but able celebration pose",
+    "disabled but able boss pose",
+    "accessible main-character pose",
+    "winter coat pose",
+    "working on laptop pose"
+  ],
+  "Outfit Match Mode": [
+    "none",
+    "manual outfit only",
+    "smart auto outfit only",
+    "smart auto plus manual outfit"
+  ],
+  "Outfit - Girls": [
+    "none",
+    "AI prompt boss outfit",
+    "airport travel outfit",
+    "baker apron outfit",
+    "basketball jersey dress",
+    "beach glam coverup",
+    "beauty influencer outfit",
+    "birthday sparkle dress",
+    "black and gold luxury outfit",
+    "black leather baddie outfit",
+    "book lover outfit",
+    "boss blazer and trousers",
+    "boutique owner outfit",
+    "boutique shopping outfit",
+    "brunch dress and heels",
+    "butterfly glam outfit",
+    "cargo pants and crop jacket",
+    "chef apron outfit",
+    "coffee shop outfit",
+    "content creator studio outfit",
+    "cozy robe self-care outfit",
+    "denim jacket and fitted jeans",
+    "diamond status outfit",
+    "digital product seller outfit",
+    "disco party outfit",
+    "Etsy seller packing-orders outfit",
+    "fall cardigan outfit",
+    "fashion blogger outfit",
+    "fitness matching set",
+    "football fan outfit",
+    "garden overalls outfit",
+    "graduation gown outfit",
+    "graffiti jacket outfit",
+    "graphic tee and cargo pants",
+    "hairstylist outfit",
+    "Halloween cute outfit",
+    "heels and handbag outfit",
+    "holiday sweater outfit",
+    "hot pink mini dress outfit",
+    "journal girl outfit",
+    "leopard print glam outfit",
+    "luxury errands outfit",
+    "main character outfit",
+    "makeup artist outfit",
+    "medical assistant scrubs outfit",
+    "money moves outfit",
+    "nail tech outfit",
+    "nurse scrubs outfit",
+    "oversized hoodie and biker shorts",
+    "pajama cozy outfit",
+    "pink and gold luxury outfit",
+    "pink glam tracksuit",
+    "pink puffer jacket outfit",
+    "plant mom outfit",
+    "purple glam outfit",
+    "queen energy outfit",
+    "roller skate shorts set",
+    "royal blue glam tracksuit",
+    "shopping bags outfit",
+    "slipper lounge outfit",
+    "sneaker girl streetwear outfit",
+    "soccer sporty set",
+    "soft boss life outfit",
+    "soft lounge set",
+    "sparkly sequin dress",
+    "teacher cardigan outfit",
+    "tennis skirt outfit",
+    "unbothered sunglasses outfit",
+    "Valentine heart outfit",
+    "varsity jacket outfit",
+    "western cowgirl outfit",
+    "white and gold glam outfit",
+    "winter coat and boots",
+    "yoga set"
+  ],
+  "Outfit - Guys": [
+    "none",
+    "airport fit outfit",
+    "barber fresh outfit",
+    "barbershop apron outfit",
+    "baseball jersey outfit",
+    "basketball jersey outfit",
+    "beach sunglasses outfit",
+    "birthday king outfit",
+    "black and gold luxury outfit",
+    "black boots outfit",
+    "black hoodie and joggers",
+    "black leather jacket outfit",
+    "black streetwear tracksuit",
+    "blazer and sneakers outfit",
+    "boss suit outfit",
+    "boxing gym outfit",
+    "boys night outfit",
+    "brunch casual outfit",
+    "business owner outfit",
+    "camera vlogger outfit",
+    "cargo vest outfit",
+    "cat dad cozy outfit",
+    "CEO suit outfit",
+    "champion outfit",
+    "chef coat outfit",
+    "clean white tee and jeans",
+    "coffee shop casual outfit",
+    "cologne ad outfit",
+    "content creator hoodie outfit",
+    "cowboy western outfit",
+    "dad life outfit",
+    "dance floor outfit",
+    "denim jacket and cargo pants",
+    "designer-inspired lounge set",
+    "DJ performance outfit",
+    "dog walking outfit",
+    "fall flannel outfit",
+    "fitness tank and joggers",
+    "football jersey outfit",
+    "fresh cut outfit",
+    "game day outfit",
+    "gamer hoodie outfit",
+    "gold chain streetwear outfit",
+    "graduation gown outfit",
+    "graffiti jacket outfit",
+    "graphic hoodie and jeans",
+    "holiday sweater outfit",
+    "king energy outfit",
+    "laptop lifestyle outfit",
+    "luxury errands outfit",
+    "luxury watch outfit",
+    "mechanic workwear outfit",
+    "medical worker scrubs outfit",
+    "money moves outfit",
+    "monochrome black outfit",
+    "motorcycle jacket outfit",
+    "music artist outfit",
+    "MVP outfit",
+    "oversized puffer outfit",
+    "party starter outfit",
+    "pet dad casual outfit",
+    "pink accent streetwear outfit",
+    "plaid overshirt outfit",
+    "poolside outfit",
+    "purple streetwear outfit",
+    "rapper jacket outfit",
+    "ring light creator outfit",
+    "roller skate outfit",
+    "royal blue boss outfit",
+    "royal blue tracksuit",
+    "skater outfit",
+    "small business owner outfit",
+    "sneakerhead streetwear outfit",
+    "soccer kit outfit",
+    "soft boss outfit",
+    "street king outfit",
+    "teacher outfit",
+    "travel jacket outfit",
+    "tuxedo outfit",
+    "varsity jacket and jeans",
+    "VIP night outfit",
+    "white and gold outfit",
+    "winter coat outfit"
+  ],
+  "Package Mockup": [
+    "none",
+    "beauty sticker pouch",
+    "boutique sticker pack sleeve",
+    "cellophane bag with shine lines",
+    "clean Etsy thumbnail package",
+    "clear bag with folded top card",
+    "clear glossy plastic sticker pouch",
+    "clear glossy protective wrapper",
+    "clear pouch with sealed sides",
+    "collectible sticker pack bag",
+    "Etsy product mockup pouch",
+    "fashion sticker retail bag",
+    "flat lay plastic pouch",
+    "front-facing retail sticker pack",
+    "full-size sticker pack bag",
+    "gift-shop sticker pouch",
+    "glam accessory sticker bag",
+    "hanging retail pouch with euro slot",
+    "high-gloss market display bag",
+    "laminated glossy sticker package",
+    "laptop sticker pack pouch",
+    "large deluxe sticker pack pouch",
+    "luxury stationery pouch",
+    "mini sticker pack pouch",
+    "phone-case sticker pack pouch",
+    "pink boutique product sleeve",
+    "pink-tinted clear plastic sleeve",
+    "planner sticker retail sleeve",
+    "premium craft fair sticker bag",
+    "premium product photography pouch",
+    "printable sticker bundle packaging",
+    "resealable retail sticker bag",
+    "scrapbook sticker pouch",
+    "sealed crinkle plastic pouch",
+    "small business packaging mockup",
+    "soft pink plastic wrapper",
+    "thick plastic retail sleeve",
+    "toy-aisle sticker pack pouch",
+    "transparent bag with flap closure",
+    "transparent cello bag with header card",
+    "vinyl sticker pack packaging"
+  ],
+  "Header Card Design": [
+    "none",
+    "black and pink leopard background",
+    "black glossy header with sparkle stars",
+    "black leopard print header card",
+    "black satin-gloss header",
+    "bold glam product header",
+    "bold title-only header",
+    "boutique retail header card",
+    "clean product title header",
+    "crowns hearts and lips header",
+    "curved gold corner lines",
+    "drippy graffiti header design",
+    "Etsy listing header design",
+    "fashion accessory header card",
+    "girly boutique header",
+    "glam beauty header card",
+    "glitter confetti header",
+    "glitter heart accents on header",
+    "glittery retail display header",
+    "gold crown accent on left side",
+    "gold curved ribbon accents",
+    "gold star accents on header",
+    "gold trim header card",
+    "graffiti glam header card",
+    "hanging slot cutout centered",
+    "Header Card Design",
+    "high contrast readable header",
+    "hot pink border header",
+    "hot pink leopard print corners",
+    "large bold top title area",
+    "large mobile-readable header",
+    "luxury black-and-gold header",
+    "men's action figure package header",
+    "men's barber shop stripe header",
+    "men's barbershop fresh cut header",
+    "men's baseball diamond header",
+    "men's basketball court header",
+    "men's beard and barber header",
+    "men's birthday king header",
+    "men's black and gold luxury header card",
+    "men's black backpack street header",
+    "men's black brick wall header",
+    "men's black carbon fiber header",
+    "men's black gold marble header",
+    "men's black leather header card",
+    "men's black white minimal header",
+    "men's blue chrome bubble header",
+    "men's bold block-letter header",
+    "men's bold graffiti header",
+    "men's bold sports badge header",
+    "men's bold sticker shop header",
+    "men's boss mode header card",
+    "men's boxing gym header card",
+    "men's brushed metal header card",
+    "men's business boss header",
+    "men's camera content header",
+    "men's camera creator header",
+    "men's camouflage accent header",
+    "men's championship trophy header",
+    "men's charcoal gray header with silver accents",
+    "men's chrome streetwear header card",
+    "men's cigar lounge inspired header",
+    "men's city skyline night header",
+    "men's clean Etsy title header",
+    "men's clean masculine retail header",
+    "men's clean-cut gentleman header",
+    "men's collector pack header card",
+    "men's cologne bottle header theme",
+    "men's comic book hero header",
+    "men's creator boss badge header",
+    "men's crown and stars header",
+    "men's dad life header",
+    "men's denim texture header card",
+    "men's diamond grillz sparkle header",
+    "men's DJ booth header",
+    "men's electric blue lightning header",
+    "men's emerald black premium header",
+    "men's fitness club header card",
+    "men's football field header",
+    "men's game controller header",
+    "men's game day header card",
+    "men's gamer neon header card",
+    "men's gold chain border header",
+    "men's gold foil block header",
+    "men's grind season header",
+    "men's gym champion header",
+    "men's gym locker header",
+    "men's headphones music header",
+    "men's high contrast thumbnail header",
+    "men's hip hop mixtape header",
+    "men's hoodie and headphones header",
+    "men's hustle energy header",
+    "men's king energy crown header",
+    "men's king status retail header",
+    "men's laptop creator header",
+    "men's luxury black header with crown icon",
+    "men's luxury boutique header card",
+    "men's luxury car chrome header",
+    "men's luxury watch header design",
+    "men's matte black header with gold trim",
+    "men's matte navy header with stars",
+    "men's metallic red chrome header",
+    "men's microphone artist header",
+    "men's money moves header",
+    "men's motorcycle chrome header",
+    "men's motorcycle club header",
+    "men's MVP badge header",
+    "men's navy gold premium header",
+    "men's navy marble header",
+    "men's orange sports header",
+    "men's party crew header",
+    "men's pet dad header",
+    "men's podcast studio header",
+    "men's premium masculine title header",
+    "men's premium sticker pack header",
+    "men's purple neon gamer header",
+    "men's red black bold header",
+    "men's retro arcade header",
+    "men's royal blue and black header card",
+    "men's rugged leather texture header",
+    "men's silver chrome bubble header",
+    "men's silver foil block header",
+    "men's smoke gray header card",
+    "men's sneaker and cap header",
+    "men's sneaker box header card",
+    "men's sneakerhead retail header",
+    "men's soccer pitch header",
+    "men's sports fan header",
+    "men's sports jersey header card",
+    "men's street king header card",
+    "men's suit-and-tie header",
+    "men's sunglasses and chain header",
+    "men's tailgate party header",
+    "men's tattoo flash header style",
+    "men's trophy and lightning header",
+    "men's tuxedo black-tie header",
+    "men's urban concrete wall header",
+    "men's urban gold frame header",
+    "men's varsity jacket inspired header",
+    "men's varsity patch header",
+    "men's VIP club header",
+    "men's watch chain wallet header",
+    "pink and black animal print header",
+    "pink kiss mark on right side",
+    "pink leopard frame header",
+    "pink metallic header card",
+    "premium sticker pack branding header",
+    "sparkle burst header card",
+    "sticker-shop header card",
+    "sticker-style header card",
+    "wide rectangular top header",
+    "women's 2000s diva header card",
+    "women's AI prompt queen header",
+    "women's airport outfit header",
+    "women's baker girl header card",
+    "women's Barbie-pink boutique header",
+    "women's beach glam header card",
+    "women's beauty bar retail header",
+    "women's beauty-store package header",
+    "women's birthday glam header",
+    "women's birthday queen header",
+    "women's black dress luxury header",
+    "women's black pink gold glam header",
+    "women's black satin pink trim header",
+    "women's blazer boss header card",
+    "women's blush pink luxury header card",
+    "women's book lover cozy header",
+    "women's booked busy bougie header",
+    "women's boss babe office header",
+    "women's boutique graffiti pink header",
+    "women's boutique product shelf header",
+    "women's braid beauty header",
+    "women's Bratz-inspired glam header",
+    "women's brunch babe header card",
+    "women's butterfly glam header card",
+    "women's camera-ready creator header",
+    "women's candy-coated sticker header",
+    "women's cat mom glam header",
+    "women's champagne sparkle header",
+    "women's cheetah print fashion header",
+    "women's chef glam header card",
+    "women's Christmas glam header",
+    "women's clean Etsy glam header",
+    "women's coffee and goals header",
+    "women's coffee shop cute header",
+    "women's confidence queen header card",
+    "women's content creator pink header",
+    "women's coquette bow header card",
+    "women's country concert header",
+    "women's cowgirl glam header",
+    "women's curl queen header card",
+    "women's cute but loud header card",
+    "women's cute chibi girl header",
+    "women's cute luxury sticker shop header",
+    "women's denim glam header card",
+    "women's designer boutique header",
+    "women's diamond sparkle beauty header",
+    "women's digital product queen header",
+    "women's disco glam header card",
+    "women's dog mom glam header",
+    "women's emerald glam boutique header",
+    "women's Etsy shop owner header",
+    "women's fall fashion header card",
+    "women's fashion accessory header",
+    "women's floral glam header card",
+    "women's fuchsia and gold sparkle header",
+    "women's garden glam header",
+    "women's girls night out header",
+    "women's glam doll package header",
+    "women's glam fuel beauty header",
+    "women's glam graffiti feminine header",
+    "women's glam nurse header card",
+    "women's glitter confetti glam header",
+    "women's glossy dollface header",
+    "women's glossy retail display header",
+    "women's gold foil feminine header",
+    "women's gold sequin party header",
+    "women's graduation glam header",
+    "women's hair salon header card",
+    "women's Halloween cute glam header",
+    "women's handbag boutique header",
+    "women's heart and sparkle header",
+    "women's high contrast pink thumbnail header",
+    "women's high heel fashion header",
+    "women's Hollywood vanity light header",
+    "women's hoodie glam header card",
+    "women's hot pink glitter boutique header card",
+    "women's influencer ring light header",
+    "women's journal girl header card",
+    "women's laptop boss header card",
+    "women's lash and lip gloss header",
+    "women's lashes and brows header",
+    "women's lavender glitter header card",
+    "women's leather baddie header",
+    "women's lip crown heart header",
+    "women's lipstick kiss header card",
+    "women's luxe stationery header card",
+    "women's luxury fashion label header",
+    "women's luxury purse and heels header",
+    "women's luxury rose marble header",
+    "women's magazine cover header card",
+    "women's main character energy header",
+    "women's makeup vanity header card",
+    "women's medical assistant glam header",
+    "women's money moves pink header",
+    "women's nail salon glam header",
+    "women's New Year sparkle header",
+    "women's no chill just glam header",
+    "women's party girl glitter header",
+    "women's pearl and lace glam header",
+    "women's perfume bottle luxury header",
+    "women's pet mom sparkle header",
+    "women's pink bow boutique header",
+    "women's pink chrome boutique header",
+    "women's pink dress boutique header",
+    "women's pink gold marble header",
+    "women's pink leopard luxury header",
+    "women's pink velvet header card",
+    "women's pink Y2K sparkle header",
+    "women's planner girl header card",
+    "women's planner sticker pack header",
+    "women's plant mom header card",
+    "women's premium feminine title header",
+    "women's pretty focused header card",
+    "women's puffy bubble glam header",
+    "women's purple glam beauty header",
+    "women's queen energy crown header",
+    "women's quilted purse header card",
+    "women's red carpet glam header",
+    "women's retro pop glam header",
+    "women's rhinestone crown header",
+    "women's robe and slippers header",
+    "women's rodeo glam header card",
+    "women's rose bouquet header card",
+    "women's rose gold foil block header",
+    "women's rose gold glam header card",
+    "women's royal blue glam header",
+    "women's sequin dress header card",
+    "women's shopping spree header",
+    "women's skincare routine header",
+    "women's small business glam header",
+    "women's sneaker girl header card",
+    "women's soft glam satin header",
+    "women's soft life pink header",
+    "women's spa day self-care header",
+    "women's sparkle bow heart header",
+    "women's sticker queen header card",
+    "women's streetwear baddie header",
+    "women's summer babe header card",
+    "women's sunglasses attitude header",
+    "women's teacher cute header card",
+    "women's tracksuit glam header",
+    "women's travel girl passport header",
+    "women's unbothered glam header",
+    "women's Valentine heart header card",
+    "women's western boots header card",
+    "women's wig boutique header",
+    "women's winter coat glam header",
+    "women's zebra pink glam header",
+    "Y2K glam header card"
+  ],
+
+  "Bottom Branding Banner": [
+    "none",
+    "bottom full-width branding bar",
+    "bottom white rectangular banner with centered text",
+    "bottom pink-to-blue gradient branding strip",
+    "bottom luxury footer strip with bold text",
+    "bottom Etsy thumbnail product label bar",
+    "bottom creator credit banner",
+    "bottom package-style footer label",
+    "bottom clean brand name strip",
+    "bottom glossy caption bar",
+    "bottom bold product description bar",
+    "bottom mobile-readable footer banner",
+    "bottom transparent text-only brand line",
+    "bottom white banner with colored text",
+    "bottom gradient banner with white text",
+    "bottom black banner with metallic text"
+  ],
+
+  "Top Callout Badge": [
+    "none",
+    "top-right white circle badge with sticker count and description",
+    "top-right white outlined circle badge",
+    "top-left white circle badge with sticker count",
+    "large clean product-count badge",
+    "round badge reading A SET OF 6 HIGH QUALITY IMAGES",
+    "round badge reading A SET OF 8 HIGH QUALITY IMAGES",
+    "round badge reading A SET OF 10 HIGH QUALITY IMAGES",
+    "round badge reading A SET OF 12 HIGH QUALITY IMAGES",
+    "round badge reading 6 PREMIUM PNG STICKERS",
+    "round badge reading 8 PREMIUM PNG STICKERS",
+    "round badge reading 10 PREMIUM PNG STICKERS",
+    "round badge reading 12 PREMIUM PNG STICKERS",
+    "rounded rectangle badge with sticker count",
+    "starburst badge with sticker count",
+    "glossy bubble badge with pack quantity",
+    "minimal white circle with bold stacked text",
+    "transparent circle outline with bold white text",
+    "pink and white circular product badge",
+    "gold rim circle badge with premium image count",
+    "Etsy thumbnail count badge",
+    "mobile-readable top badge",
+    "clean Canva-style product callout circle",
+    "circle badge plus short pack description",
+    "badge showing number of stickers included",
+    "badge showing number of high quality images included",
+    "badge showing PNG pack quantity",
+    "badge showing printable sticker sheet count",
+    "badge showing digital download count",
+    "badge showing bonus sticker count"
+  ],
+  "Custom Typography Sticker": [
+    "none",
+    "custom quote sticker with thick white border",
+    "custom quote sticker set",
+    "custom center quote sticker",
+    "custom mini quote stickers",
+    "custom name sticker",
+    "custom brand phrase sticker",
+    "custom funny phrase sticker",
+    "custom glam phrase sticker",
+    "custom motivational phrase sticker",
+    "custom product label sticker",
+    "custom sticker words in bubble letters",
+    "custom sticker words in chrome letters",
+    "custom sticker words in glitter letters",
+    "custom sticker words in graffiti letters",
+    "custom sticker words with crown accents",
+    "custom sticker words with heart accents",
+    "custom sticker words with sparkle accents",
+    "custom stacked typography sticker",
+    "custom typography sticker only no header text"
+  ],
+  "Main Center Quote Sticker": [
+    "none",
+    "Barber Fresh",
+    "Big Brand Energy",
+    "Big Goals Big Gloss",
+    "Big Moves Big Plans",
+    "Big Purse Big Plans",
+    "Birthday Babe",
+    "Birthday Boss",
+    "Birthday King",
+    "Birthday Queen",
+    "Bold But Blessed",
+    "Booked Busy And Bougie",
+    "Booked Busy Blessed",
+    "Born To Stand Out",
+    "BOSS BABE",
+    "Boss Babe Energy",
+    "Boss Dude Energy",
+    "Boss Level Unlocked",
+    "BOSS MOVES ONLY",
+    "Bossy Glossy Blessed",
+    "Built Different",
+    "Cat Dad Vibes",
+    "Champion Mode",
+    "Cheers To Big Goals",
+    "Clean Cut Big Goals",
+    "CONFIDENCE IS MY BEST ACCESSORY",
+    "Confidence Loaded",
+    "Confidence Looks Good On Me",
+    "Content King",
+    "Content Queen",
+    "Creator King Energy",
+    "Creator Mode Activated",
+    "Cute But Not Quiet",
+    "Cute Face Loud Style No Chill",
+    "Cute Loud Loaded",
+    "Dad Life Loaded",
+    "Digital Products That Slay",
+    "Dog Dad Vibes",
+    "Drip Lipstick And Confidence",
+    "Drip Sneakers And Confidence",
+    "Etsy Boss Energy",
+    "Faith Focused Fresh",
+    "Fresh Face Loud Style No Chill",
+    "Fresh Fit Big Energy",
+    "Fresh Loud Loaded",
+    "Fresh Out The Pack",
+    "Game Day Greatness",
+    "Gamer Mode On",
+    "GLAM CREW LOADED",
+    "GLAM FUEL",
+    "Glam Girl Era",
+    "premium sticker",
+    "Glam Goals Only",
+    "Glam Guy Era",
+    "GLAM GUYS LOADED",
+    "Glam Mode On",
+    "Glam On Demand",
+    "Glow Different",
+    "Glow Up In Progress",
+    "GOOD COFFEE BIG GOALS",
+    "Good Vibes Big Goals",
+    "Grill Master Energy",
+    "Hustle Looks Good",
+    "I Came To Slay",
+    "KING ENERGY",
+    "Launch Day Loaded",
+    "Loud Style Soft Heart",
+    "Luxury Looks Loud",
+    "Luxury Mood Only",
+    "Main Character Energy",
+    "Main Sticker Energy",
+    "Make It Look Expensive",
+    "MAKING MOVES IN HEELS",
+    "MAKING MOVES IN SNEAKERS",
+    "MVP Energy",
+    "No Basic Stickers",
+    "No Chill Just Glam",
+    "Paid Focused Peaceful",
+    "Party Time Loaded",
+    "Pet Dad Energy",
+    "Planner Queen Energy",
+    "Pocket Full Of Glam",
+    "Podcast Boss",
+    "POLISHED AND POWERFUL",
+    "PRETTY FOCUSED AND UNBOTHERED",
+    "Pretty Paid And Focused",
+    "Pretty With A Purpose",
+    "Profit And Peace",
+    "QUEEN ENERGY",
+    "Sharp With A Purpose",
+    "Shop Small Slay Big",
+    "Slay The Day",
+    "Small Business Big Slay",
+    "Soft But Strong",
+    "Soft Life Loaded",
+    "Sparkle With Attitude",
+    "Sticker King Status",
+    "Sticker Pack Royalty",
+    "Sticker Queen Status",
+    "Streetwear And Standards",
+    "Styled And Unbothered",
+    "Too Clean To Compete",
+    "Too Cute To Clock Out",
+    "TOO FRESH TO STRESS",
+    "Too Glam To Dim",
+    "TOO GLAM TO GIVE A DAMN",
+    "Unbothered And Upgraded",
+    "VIP Vibes Only",
+    "Winner Vibes",
+    "Work From Home Winner"
+  ],
+  "Sticker Arrangement": [
+    "none",
+    "accessories in corner clusters",
+    "accessories placed on upper half",
+    "accessory stickers around quote stickers",
+    "all stickers fully visible",
+    "balanced sticker collage",
+    "barber shop sticker layout",
+    "birthday sticker pack layout",
+    "boss badge sticker center",
+    "bottom row with nail polish lips quote crown",
+    "bottom row with sneakers watch quote trophy",
+    "business creator sticker layout",
+    "center character with quote banner underneath",
+    "characters placed on lower half",
+    "chrome stars between every sticker",
+    "clean masculine sticker collage",
+    "clean product-sheet spacing",
+    "clean rows with consistent spacing",
+    "clear rows of stickers",
+    "clear top-to-bottom reading flow",
+    "coffee sticker right center",
+    "collector pack display layout",
+    "cologne sticker upper right",
+    "corner stickers add balance",
+    "creator stickers grouped together",
+    "crown sticker bottom right",
+    "dense glam sticker collage",
+    "diagonal lightning filler",
+    "diagonal sparkle filler",
+    "drink cup sticker top right",
+    "Etsy thumbnail centered layout",
+    "face stickers never covered",
+    "floating sticker look inside pouch",
+    "full sticker collection display",
+    "fun scattered sticker pack layout",
+    "gaming sticker pack layout",
+    "girl character left with glam elements right",
+    "glam boutique retail shelf layout",
+    "gold stars between every sticker",
+    "grid-style sticker layout",
+    "guy character left with men’s elements right",
+    "handbag sticker top left",
+    "heart quote sticker left center",
+    "heels sticker center bottom",
+    "high clarity no clutter layout",
+    "high-value bundle look",
+    "important words placed large",
+    "king badge sticker center",
+    "large center quote with icons around it",
+    "large character centered with elements around",
+    "large hero sticker with smaller side stickers",
+    "large title sticker at top with accessories below",
+    "large title sticker centered above characters",
+    "layered but readable layout",
+    "left side glam accessory stickers",
+    "left side sports accessory stickers",
+    "lightning stickers scattered",
+    "lips stickers scattered",
+    "luxury lifestyle sticker layout",
+    "main quote placed above accessory row",
+    "masculine retail shelf layout",
+    "middle row with quotes and heels",
+    "middle row with quotes and sneakers",
+    "mini sticker icons around main character",
+    "mobile-readable sticker layout",
+    "nail polish sticker bottom left",
+    "no crowded center area",
+    "no overlap on text stickers",
+    "no sticker touching package edges",
+    "party stickers grouped together",
+    "perfume sticker upper right",
+    "pet parent sticker layout",
+    "pet stickers grouped together",
+    "planner sticker sheet layout",
+    "premium printable sticker sheet layout",
+    "premium spaced sticker layout",
+    "quote stickers in middle column",
+    "realistic sticker stack depth",
+    "retail display arrangement",
+    "right side beauty stickers",
+    "right side men’s style stickers",
+    "small icons evenly distributed",
+    "sneaker sticker center bottom",
+    "sports card pack arrangement",
+    "sports stickers grouped together",
+    "staggered rows with clean gaps",
+    "sticker set fills package",
+    "sticker shadows inside pouch",
+    "stickers arranged like premium vinyl cuts",
+    "streetwear sticker drop layout",
+    "sunglasses sticker top center",
+    "symmetrical sticker balance",
+    "text stickers kept straight",
+    "thumbnail-first centered composition",
+    "top row with bag glasses drink perfume",
+    "top row with cap sunglasses chain cologne",
+    "toy package display layout",
+    "trophy sticker bottom right",
+    "two characters mirrored left and right",
+    "wallet sticker bottom left",
+    "watch sticker right center",
+    "white kiss-cut borders on every sticker",
+    "wide empty space around title"
+  ],
+  "Backing Color": [
+    "none",
+    "barbershop tile backing",
+    "baseball diamond backing card",
+    "basketball court backing card",
+    "birthday confetti backing",
+    "black and gold art deco backing",
+    "black and pink animal print backing",
+    "black crown pattern backing",
+    "black leopard backing",
+    "black marble backing",
+    "black packaging insert card",
+    "black planner page backing",
+    "black studio surface",
+    "black velvet-inspired backing",
+    "black-to-blue masculine gradient backing",
+    "blue boutique card",
+    "blue lightning pattern backing",
+    "blue scrapbook backing",
+    "blue shadowed studio background",
+    "blue-to-pink gradient backing",
+    "bold masculine display card",
+    "boss guy backing card",
+    "bright colorful sticker backing",
+    "bubblegum pink backing",
+    "business desk backing",
+    "carbon fiber texture backing",
+    "checkerboard backing",
+    "chrome metal texture backing",
+    "clean Etsy listing backing",
+    "clean neutral beige backing",
+    "clean white backing",
+    "clear plastic pouch background",
+    "comic burst backing",
+    "cream luxury backing",
+    "creator studio backing",
+    "dark marketplace backdrop",
+    "dark navy gradient card",
+    "deep red backing",
+    "denim texture backing",
+    "electric blue backing",
+    "emerald green backing",
+    "football turf backing card",
+    "fuchsia backing card",
+    "gamer neon room backing",
+    "girly glam backing card",
+    "glam beauty-store backing",
+    "glossy fashion accessory backing",
+    "glossy men’s accessory backing",
+    "gold foil paper backing",
+    "gold sparkle backing",
+    "gold star pattern backing",
+    "gray smoke backing",
+    "gym locker backing",
+    "high-contrast black backing",
+    "high-contrast pink backing",
+    "hot pink glam backing",
+    "lavender backing card",
+    "leather texture backing",
+    "light pink gradient card",
+    "luxury car interior backing",
+    "luxury product photo backing",
+    "magenta glossy backing",
+    "matte black backing",
+    "men’s lifestyle-store backing",
+    "minimal high-end product backing",
+    "motorcycle garage backing",
+    "navy and silver art deco backing",
+    "navy marble backing",
+    "navy-to-gold premium backing",
+    "orange sports backing",
+    "pale pink product background",
+    "party lights backing",
+    "pastel pink studio surface",
+    "pet paw-print backing",
+    "pink and gold art deco backing",
+    "pink boutique card",
+    "pink glitter paper backing",
+    "pink heart pattern backing",
+    "pink leopard backing",
+    "pink packaging insert card",
+    "pink planner page backing",
+    "pink plastic pouch background",
+    "pink satin backing",
+    "pink scrapbook backing",
+    "pink shadowed studio background",
+    "pink velvet-inspired backing",
+    "pink-to-purple gradient backing",
+    "podcast studio backing",
+    "premium flat-lay black background",
+    "premium flat-lay pink background",
+    "purple shimmer backing",
+    "retro arcade backing",
+    "rose pink backing paper",
+    "royal blue accent backing",
+    "silver foil paper backing",
+    "silver sparkle backing",
+    "sneaker wall backing",
+    "soccer field backing card",
+    "soft blush pink backing",
+    "soft glam display card",
+    "soft glossy pink background",
+    "soft gray premium backing",
+    "soft pink marketplace backdrop",
+    "sports field backing card",
+    "streetwear graffiti backing",
+    "VIP club glow backing",
+    "warm pink product background",
+    "warm tan product background",
+    "white marble backing"
+  ],
+  "Finish Quality": [
+    "none",
+    "4:5 vertical thumbnail crop",
+    "8K style detail",
+    "all stickers crisp and clear",
+    "balanced color grading",
+    "barbershop retail quality",
+    "BeaconAI product cover quality",
+    "beauty boutique quality",
+    "black glossy contrast",
+    "blue chrome shine",
+    "bold cartoon sticker art",
+    "bold high-value bundle look",
+    "bright marketplace thumbnail",
+    "bright studio lighting",
+    "Canva listing cover quality",
+    "centered hero product",
+    "chibi sticker finish",
+    "clean no blur finish",
+    "clean premium spacing",
+    "clean transparent sticker edges",
+    "clean white margin around product",
+    "clear sealed package realism",
+    "clear visible sticker elements",
+    "collector-quality sticker pack",
+    "commercial product photography",
+    "creator product quality",
+    "crisp shadows under stickers",
+    "crisp white sticker borders",
+    "dark premium marketplace thumbnail",
+    "digital download cover quality",
+    "expensive gold accent finish",
+    "Facebook marketplace-ready image",
+    "feminine character sticker finish",
+    "flyer-ready finish",
+    "front-facing product mockup",
+    "full package visible finish",
+    "gamer merch quality",
+    "glitter sparkle details",
+    "glossy sticker shine",
+    "glossy vinyl sticker surface",
+    "Gumroad product image quality",
+    "high clarity product mockup",
+    "high contrast mobile thumbnail",
+    "high-end boutique presentation",
+    "high-end men’s shop presentation",
+    "high-end mockup realism",
+    "Instagram shop-ready image",
+    "luxury glam finish",
+    "luxury masculine finish",
+    "luxury product ad quality",
+    "masculine character sticker finish",
+    "matte vinyl sticker surface",
+    "metallic gold shine",
+    "metallic silver shine",
+    "mobile-readable product image",
+    "no covered main quote",
+    "no covered title",
+    "no cropped feet",
+    "no cropped header card",
+    "no cropped package",
+    "no distorted faces",
+    "no extra random stickers",
+    "no glare hiding faces",
+    "no glare hiding words",
+    "no hidden stickers",
+    "no melted accessories",
+    "no messy overlaps",
+    "no misspelled text",
+    "no pixelated sticker edges",
+    "no random extra hands",
+    "no unreadable text",
+    "no warped typography",
+    "party product quality",
+    "pet sticker product quality",
+    "pink glitter shine",
+    "Pinterest-ready vertical image",
+    "polished small business product image",
+    "premium digital product preview",
+    "premium Etsy listing photo",
+    "premium glossy highlight control",
+    "premium retail shelf finish",
+    "print-ready clarity",
+    "printable sticker pack mockup",
+    "professional lighting reflections",
+    "professional product photo crop",
+    "professional shop cover image",
+    "ready-to-sell mockup",
+    "realistic paper backing texture",
+    "realistic retail packaging",
+    "realistic sticker thickness",
+    "rich black contrast",
+    "scroll-stopping cover image",
+    "sharp readable text",
+    "Shopify product image quality",
+    "sleek silver accent finish",
+    "smooth airbrushed sticker art",
+    "soft grounded package shadow",
+    "soft realistic drop shadow",
+    "sports merch quality",
+    "stationery-store quality packaging",
+    "streetwear drop quality",
+    "thick white kiss-cut borders",
+    "thumbnail-safe composition",
+    "TikTok shop cover quality",
+    "toy-store quality packaging",
+    "ultra glossy high resolution finish",
+    "unisex sticker pack finish",
+    "vibrant saturated color",
+    "vinyl sticker sheen",
+    "website hero image quality"
+  ]
+};
+
+
+const elementCategories = {
+  "General Sticker Elements": [
+    "none",
+    "balloons",
+    "barber clippers",
+    "baseball",
+    "baseball cap",
+    "basketball",
+    "beard comb",
+    "beauty spray bottle",
+    "birthday cake",
+    "black and pink sunglasses",
+    "black bow sticker",
+    "black coffee cup with glam quote",
+    "black heart with gold trim",
+    "black high heel with pink sole",
+    "black nail polish bottle",
+    "black phone case",
+    "black quilted handbag with gold chain",
+    "black sneakers",
+    "black sunglasses",
+    "BOOKED BUSY BOUGIE quote sticker",
+    "BOSS BABE quote sticker",
+    "boxing glove icon",
+    "boxing gloves",
+    "bunny",
+    "butterfly charm",
+    "camera",
+    "CAT MOM quote sticker",
+    "champagne glass",
+    "champion badge",
+    "clutch purse",
+    "cologne bottle",
+    "combat boot",
+    "compact mirror",
+    "CONFIDENCE IS MY BEST ACCESSORY quote sticker",
+    "cowboy boot",
+    "crossbody bag",
+    "cupcake",
+    "cute cat",
+    "cute dog",
+    "diamond sparkle icon",
+    "digital download badge",
+    "DIGITAL PRODUCTS THAT SLAY quote sticker",
+    "disco ball",
+    "dog bone",
+    "DOG MOM quote sticker",
+    "dumbbell",
+    "foam finger",
+    "football",
+    "football helmet",
+    "fur baby badge",
+    "GAME DAY quote sticker",
+    "gaming controller",
+    "gift box",
+    "glam compact phone",
+    "gold chain charm",
+    "gold chain necklace",
+    "gold crown with heart jewels",
+    "gold glitter heart",
+    "gold high heel",
+    "gold star",
+    "goldfish bowl",
+    "GOOD COFFEE BIG GOALS cup sticker",
+    "gym bottle",
+    "hamster",
+    "headphones",
+    "heart sunglasses",
+    "hot coffee mug",
+    "iced coffee cup",
+    "king crown",
+    "KING ENERGY quote sticker",
+    "king status badge",
+    "kitty paw print",
+    "laptop",
+    "lash strip",
+    "lip gloss tube",
+    "lipstick mark",
+    "lipstick tube",
+    "luxury tote bag",
+    "MAIN CHARACTER ENERGY quote sticker",
+    "makeup palette",
+    "MAKING MOVES IN HEELS quote sticker",
+    "mascara wand",
+    "medal",
+    "men’s luxury watch",
+    "men’s wallet",
+    "microphone",
+    "mini backpack",
+    "mini gold crown",
+    "mocktail cup",
+    "money clip",
+    "motorcycle helmet",
+    "music note",
+    "MVP ENERGY quote sticker",
+    "notebook",
+    "party hat",
+    "PARTY TIME quote sticker",
+    "pen",
+    "pencil",
+    "perfume bottle labeled GLAM FUEL",
+    "pet bowl",
+    "pet collar",
+    "pet crown",
+    "pet tag heart",
+    "pink bow sticker",
+    "pink camera",
+    "pink drink cup with black heart",
+    "pink glitter heart",
+    "pink glitter lips",
+    "pink high heel with bow",
+    "pink leopard heart",
+    "pink nail polish bottle",
+    "pink phone case",
+    "pink quilted handbag with gold chain",
+    "pink sneakers",
+    "pink star",
+    "planner",
+    "POLISHED AND POWERFUL nail polish sticker",
+    "PRETTY FOCUSED AND UNBOTHERED quote sticker",
+    "puppy paw print",
+    "queen crown",
+    "red glossy lips",
+    "rhinestone heart",
+    "ring light",
+    "roller skate",
+    "SHOP SMALL quote sticker",
+    "shopping bag",
+    "slipper",
+    "sneaker sticker",
+    "soccer ball",
+    "soccer cleats",
+    "SOFT LIFE LOADED quote sticker",
+    "sparkle burst",
+    "sports jersey",
+    "sticky notes",
+    "tennis ball",
+    "tennis ball pet toy",
+    "TOO GLAM TO GIVE A DAMN heart quote sticker",
+    "trophy",
+    "varsity jacket",
+    "VIP badge",
+    "volleyball",
+    "whistle",
+    "yarn ball"
+  ],
+  "Fashion Accessory Stickers": [
+    "none",
+    "barber clippers sticker",
+    "barbershop pole sticker",
+    "baseball cap sticker",
+    "basketball sticker",
+    "beard comb sticker",
+    "beard oil bottle sticker",
+    "beauty desk accessory sticker",
+    "black and gold purse",
+    "black backpack sticker",
+    "black bow tie sticker",
+    "black coffee cup with glam quote",
+    "black coffee tumbler",
+    "black combat boot sticker",
+    "black heart with gold trim",
+    "black heel with pink sole",
+    "black luxury sneaker sticker",
+    "black marble heart sticker",
+    "black perfume bottle labeled GLAM FUEL",
+    "black phone case sticker",
+    "black quilted handbag with gold chain",
+    "black quote sticker with white border",
+    "black sunglasses sticker",
+    "blue chrome sunglasses sticker",
+    "blue flame heart sticker",
+    "boss desk accessory sticker",
+    "boxing glove sticker",
+    "bucket hat sticker",
+    "camera sticker",
+    "champion trophy sticker",
+    "chrome initials badge",
+    "chrome spark burst stickers",
+    "chrome star stickers",
+    "cute makeup brush sticker",
+    "denim jacket sticker",
+    "designer-inspired duffel bag",
+    "designer-inspired glam handbag",
+    "diamond sparkle icon",
+    "football helmet sticker",
+    "fresh sneaker sticker",
+    "gaming controller sticker",
+    "glam fashion icon set",
+    "glam shopping bag",
+    "glitter bow accent",
+    "glossy perfume bottle",
+    "gold chain accessory",
+    "gold crown charm sticker",
+    "gold glitter hearts",
+    "gold hoop earrings sticker",
+    "grillz sparkle sticker",
+    "gym duffel sticker",
+    "headphones sticker",
+    "heart-shaped quote sticker",
+    "king crown with black jewels",
+    "king status crown charm",
+    "laptop sticker",
+    "large gold crown with heart jewels",
+    "leather jacket sticker",
+    "lightning bolt stickers",
+    "lip gloss tube sticker",
+    "luxury beauty bottle",
+    "luxury keychain sticker",
+    "luxury watch sticker",
+    "matte black coffee tumbler",
+    "matte cologne bottle",
+    "men’s cologne bottle sticker",
+    "men’s leather wallet sticker",
+    "men’s shopping bag",
+    "men’s style icon set",
+    "microphone sticker",
+    "mini gold stars",
+    "mini starburst stickers",
+    "money clip sticker",
+    "motorcycle helmet sticker",
+    "mustache sticker",
+    "pink and black sunglasses",
+    "pink bow sticker",
+    "pink coffee tumbler",
+    "pink compact mirror sticker",
+    "pink glitter lips",
+    "pink glitter nail polish bottle",
+    "pink handbag charm",
+    "pink heart gem icons",
+    "pink high heel pair with bow",
+    "pink leopard heart sticker",
+    "pink phone case sticker",
+    "pink quilted handbag with gold chain",
+    "pink smoothie cup with black heart",
+    "protein shaker sticker",
+    "rhinestone heart sticker",
+    "silver chain accessory",
+    "snapback cap sticker",
+    "sneaker charm sticker",
+    "sparkly lipstick mark",
+    "sports jersey sticker",
+    "streetwear hoodie sticker",
+    "suit jacket sticker",
+    "tattoo-style rose sticker",
+    "tuxedo bow tie sticker",
+    "varsity patch sticker",
+    "VIP wristband sticker"
+  ],
+  "Women Glam Elements": [
+    "pink glitter lips","gold crown with heart jewels","pink quilted handbag","black quilted handbag","lip gloss tube","pink nail polish bottle","perfume bottle labeled GLAM FUEL","pink high heels with bow","heart sunglasses","makeup palette","compact mirror","gold hoop earrings","diamond sparkle","pink bow","lashes sticker","lipstick mark","glitter heart","pink shopping bag","beauty brush","vanity mirror","pink coffee cup","boss babe badge","soft life badge","queen energy crown","glam phone case","pink champagne glass","sparkle cluster","butterfly charm","rhinestone heart","pink leopard heart","gold chain purse","glam planner","pink laptop","cute heels","glitter compact","pink roses","gold stars","boutique shopping bag","fashion quote bubble","glossy sticker bow"
+  ],
+  "Men Style Elements": [
+    "black sunglasses","gold chain","luxury watch","fresh sneakers","black leather jacket","baseball cap","cologne bottle","beard comb","barber clippers","men’s wallet","coffee tumbler","sports duffel bag","gold crown king icon","gym bag","basketball sneakers","graphic hoodie","denim jacket","motorcycle helmet","black boots","gaming controller","headphones","microphone","camera","laptop","money clip","keychain","black phone case","varsity jacket","football helmet","boxing gloves","grillz sparkle","barbershop pole","masculine quote badge","king energy badge","boss moves badge","clean cut badge","streetwear chain","black backpack","leather belt","chrome star"
+  ],
+  "Sports Elements": [
+    "basketball","football","baseball","soccer ball","tennis racket","volleyball","boxing gloves","cheer bow","megaphone","trophy","medal","whistle","stadium lights","sports jersey","basketball hoop","football helmet","baseball cap","soccer cleats","running shoes","gym bottle","dumbbell","fitness tracker","scoreboard badge","team spirit banner","foam finger","goal net","tennis ball","golf club","hockey stick","skateboard","roller skates","dance trophy","track spikes","champion quote badge","game day badge","MVP badge","winner crown","sports lightning bolt","star player icon","victory sparkle"
+  ],
+  "Party Elements": [
+    "birthday cake","cupcake","balloons","confetti","party hat","champagne glass","mocktail cup","disco ball","sparkler","gift box","party horn","glitter banner","number candle","birthday crown","pink bow gift","gold streamers","dance floor icon","DJ headphones","music note","party lights","photo booth camera","cake slice","heart balloon","star balloon","celebration badge","birthday glam badge","VIP badge","girls night badge","boys night badge","cheers badge","party invite card","ribbon","fireworks","glitter swirl","neon sign","club wristband","party sunglasses","confetti heart","sparkle burst","celebration sticker quote"
+  ],
+  "Pets Elements": [
+    "cute dog","cute cat","puppy paw print","kitty paw print","pet bowl","dog bone","cat fish toy","pet collar","pink pet bow","blue pet bow","dog leash","cat crown","dog crown","pet bed","pet shampoo bottle","tennis ball","yarn ball","cute hamster","bunny","goldfish bowl","pet treat bag","pet tag heart","paw heart","fur baby badge","dog mom badge","cat mom badge","pet love quote","pet stroller","grooming brush","pet sweater","tiny pet sunglasses","doghouse","cat tree","bird cage","cute parrot","turtle","pet birthday hat","pet sparkle stars","animal heart sticker","best pet badge"
+  ],
+  "Business / Creator Elements": [
+    "laptop","phone","tablet","planner","notebook","sticky notes","camera","ring light","microphone","email icon","shopping cart","digital download badge","Etsy shop badge","content creator badge","boss desk coffee","calendar","money bag","gold coins","credit card","receipt","packaging box","shipping label","thank you card","brand logo placeholder","social media icons","hashtag badge","SEO badge","launch day badge","sale tag","new product badge","course badge","ebook badge","AI prompt badge","Canva template badge","digital product badge","planner sticker badge","work from home badge","boss babe desk","small business badge","profit sparkle"
+  ],
+  "Quotes / Word Stickers": [
+    "BOSS BABE","KING ENERGY","premium sticker","BIG GOALS BIG GLOSS","GOOD COFFEE BIG GOALS","CUTE FACE LOUD STYLE","NO CHILL JUST GLAM","BOOKED BUSY BOUGIE","SOFT LIFE LOADED","MAIN CHARACTER ENERGY","MAKING MOVES","MVP ENERGY","GAME DAY","CHAMPION MODE","PARTY TIME","BIRTHDAY GLAM","CHEERS BESTIE","FUR BABY LOVE","DOG MOM","CAT MOM","SHOP SMALL","DIGITAL PRODUCTS THAT SLAY","CONTENT QUEEN","BOSS MOVES","CONFIDENCE LOADED","TOO GLAM TO DIM","PRETTY FOCUSED","UNBOTHERED","LUXURY LOOKS LOUD","STICKER BOSS","GOAL GETTER","BRUNCH BABE","WEEKEND SLAY","GLAM FUEL","QUEEN ENERGY","KING STATUS","GOOD VIBES","BESTIE ENERGY","WINNER VIBES","CUTE BUT LOUD"
+  ]
+};
+
+function renderElementControls(){
+  const holder = document.getElementById("elementControls");
+  if(!holder) return;
+  holder.innerHTML = Object.entries(elementCategories).map(([cat, items]) => {
+    const id = cat.replace(/[^a-z0-9]/gi,"_");
+    return `<div class="card">
+      <label>${cat}<span class="note">multi-select</span></label>
+      <div style="margin-bottom:8px">
+        <button class="miniBtn dark" type="button" onclick="selectElementGroup('${cat}', true)">Select All</button>
+        <button class="miniBtn secondary" type="button" onclick="selectElementGroup('${cat}', false)">Clear</button>
+      </div>
+      <div class="checkList" id="${id}">
+        ${items.map((item, index) => `
+          <label class="checkItem">
+            <input type="checkbox" data-element-cat="${cat}" value="${item}">
+            <span>${item}</span>
+          </label>`).join("")}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function selectElementGroup(cat, checked){
+  document.querySelectorAll(`input[data-element-cat="${cat}"]`).forEach(cb => cb.checked = checked);
+}
+
+function checkPackElement(value, checked = true){
+  document.querySelectorAll("input[data-element-cat]").forEach(cb => {
+    if(cb.value === value) cb.checked = checked;
+  });
+}
+
+function getSelectedPackElements(){
+  const grouped = {};
+  document.querySelectorAll("input[data-element-cat]:checked").forEach(cb => {
+    const cat = cb.getAttribute("data-element-cat");
+    if(!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(cb.value);
+  });
+  return grouped;
+}
+
+function formatSelectedPackElements(){
+  const grouped = getSelectedPackElements();
+  const lines = Object.entries(grouped).map(([cat, items]) => `- ${cat}: ${items.join(", ")}`);
+  return lines.length ? lines.join("\n") : "- none selected";
+}
+
+function getFlatSelectedPackElements(){
+  return Array.from(document.querySelectorAll("input[data-element-cat]:checked")).map(cb => cb.value).filter(v => v && v !== "none");
+}
+
+function getAllElementOptions(){
+  const all = ["none"];
+  Object.values(elementCategories).flat().forEach(item => {
+    if(item && item !== "none" && !all.includes(item)) all.push(item);
+  });
+  return all;
+}
+
+function getPoseAccessoryPropOptions(){
+  // HARD CLEAN PROP-ONLY LIST for Pose Slot Builder.
+  // Do not pull from sticker elements, quotes, labels, badges, headers, mockups, or packaging options here.
+  return [
+    "none",
+    "alarm clock",
+    "apron",
+    "backpack",
+    "balloons",
+    "barber clippers",
+    "baseball",
+    "baseball bat",
+    "baseball cap",
+    "basketball",
+    "beard comb",
+    "beauty spray bottle",
+    "birthday cake",
+    "book",
+    "bouquet",
+    "boxing gloves",
+    "briefcase",
+    "camera",
+    "champagne glass",
+    "clipboard",
+    "coffee cup",
+    "cologne bottle",
+    "compact mirror",
+    "cosmetic bag",
+    "cowboy hat",
+    "credit card",
+    "cupcake",
+    "dog leash",
+    "dumbbell",
+    "earbuds",
+    "fan",
+    "football",
+    "football helmet",
+    "gift box",
+    "glasses",
+    "gold chain",
+    "gold necklace",
+    "grocery bag",
+    "gym bottle",
+    "hand mirror",
+    "handbag",
+    "headphones",
+    "iced coffee",
+    "journal",
+    "keychain",
+    "keys",
+    "laptop",
+    "lip gloss",
+    "lipstick tube",
+    "makeup brush",
+    "makeup palette",
+    "mascara wand",
+    "medal",
+    "microphone",
+    "mini backpack",
+    "money stack",
+    "motorcycle helmet",
+    "nail polish bottle",
+    "notebook",
+    "paint brush",
+    "party cup",
+    "party hat",
+    "pen",
+    "pencil",
+    "perfume bottle",
+    "pet bowl",
+    "pet collar",
+    "phone",
+    "planner",
+    "shopping bag",
+    "skateboard",
+    "soccer ball",
+    "sunglasses",
+    "tablet",
+    "tennis ball",
+    "tote bag",
+    "travel suitcase",
+    "trophy",
+    "wallet",
+    "watch",
+    "water bottle",
+    "whistle",
+    "yoga mat"
+  ];
+}
+
+const sameCharacterPoseGroups = {
+  "Girl Pose Variations": ["standing confident hands on hips","one hand on hip","selfie pose","peace sign pose","waving pose","heart hands pose","walking forward pose","sitting cute pose","pointing pose","holding coffee cup","holding laptop","holding phone and coffee","holding planner","on phone pose","shopping bag pose","looking over shoulder","over-the-shoulder wink","runway pose","walking in heels","blowing a kiss","throwing glitter pose","holding makeup palette","holding lip gloss","holding nail polish bottle","holding perfume bottle","brunch drink pose","celebration pose","dancing pose","cute shy pose","bonnet and leather pants pose"],
+  "Guy Pose Variations": ["standing confident with arms crossed","standing with hands in pockets","walking forward pose","holding coffee cup pose","holding laptop pose","holding phone pose","adjusting sunglasses pose","adjusting watch pose","buttoning blazer pose","cool street walk pose","pointing at viewer pose","holding shopping bag pose","gaming controller pose","microphone performance pose","holding trophy pose","basketball dribble pose","football catching pose","barber clippers pose","gym dumbbell pose","king energy crown pose","hoodie pocket pose","sneaker flex pose","travel suitcase pose","work from home pose"]
+};
+
+function htmlOption(value, label){
+  const safeValue = String(value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  const safeLabel = String(label || value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  return `<option value="${safeValue}">${safeLabel}</option>`;
+}
+
+function htmlOptGroup(label, items){
+  return `<optgroup label="${label}">${items.map(item => htmlOption(item, item)).join("")}</optgroup>`;
+}
+
+function getCurrentPoseGenderLane(){
+  const girlSelect = document.getElementById(safeId("Character Sticker"));
+  const guySelect = document.getElementById(safeId("Character Sticker - Guys"));
+  const headerSelect = document.getElementById(safeId("Header Card Design"));
+  const girlValue = girlSelect ? girlSelect.value : "none";
+  const guyValue = guySelect ? guySelect.value : "none";
+  const headerValue = headerSelect ? headerSelect.value.toLowerCase() : "";
+  const hasGirl = girlValue && girlValue !== "none";
+  const hasGuy = guyValue && guyValue !== "none";
+  if(hasGuy && !hasGirl) return "guy";
+  if(hasGirl && !hasGuy) return "girl";
+  if(hasGirl && hasGuy){
+    if(headerValue.includes("men's")) return "guy";
+    if(headerValue.includes("women's")) return "girl";
+  }
+  if(headerValue.includes("men's")) return "guy";
+  return "girl";
+}
+
+function updatePoseSlotGenderHairOptions(){
+  const genderLane = getCurrentPoseGenderLane();
+  const hairOptions = genderLane === "guy" ? (categories["Hairstyle - Guys"] || ["none"]) : (categories["Hairstyle - Girls"] || ["none"]);
+  const groupLabel = genderLane === "guy" ? "Guy Hairstyles" : "Girl Hairstyles";
+  const valid = new Set(hairOptions);
+  document.querySelectorAll('select[data-pose-field="hairstyle"]').forEach(select => {
+    const current = select.value || "none";
+    select.innerHTML = `${htmlOption("none", "none")}${htmlOptGroup(groupLabel, hairOptions.filter(x => x !== "none"))}`;
+    select.value = valid.has(current) ? current : "none";
+  });
+}
+
+function renderPosePackControls(){
+  const holder = document.getElementById("posePackControls");
+  if(!holder) return;
+  const girlPoses = sameCharacterPoseGroups["Girl Pose Variations"] || [];
+  const guyPoses = sameCharacterPoseGroups["Guy Pose Variations"] || [];
+  const girlOutfits = categories["Outfit - Girls"] || ["none"];
+  const guyOutfits = categories["Outfit - Guys"] || ["none"];
+  const girlHair = categories["Hairstyle - Girls"] || ["none"];
+  const guyHair = categories["Hairstyle - Guys"] || ["none"];
+  const currentGenderLane = getCurrentPoseGenderLane();
+  const currentHairOptions = currentGenderLane === "guy" ? guyHair : girlHair;
+  const currentHairLabel = currentGenderLane === "guy" ? "Guy Hairstyles" : "Girl Hairstyles";
+  const elements = getPoseAccessoryPropOptions();
+
+  const slotCards = Array.from({length:10}, (_, index) => {
+    const n = index + 1;
+    return `<div class="poseBuilderCard" data-pose-builder-slot="${n}">
+      <h3>Pose Slot ${n}</h3>
+      <div class="slotFields">
+        <div><label>Pose ${n}</label><select data-pose-slot="${n}" data-pose-field="pose">${htmlOption("none", "none")}${htmlOptGroup("Girl Poses", girlPoses)}${htmlOptGroup("Guy Poses", guyPoses)}</select></div>
+        <div><label>Outfit ${n}</label><select data-pose-slot="${n}" data-pose-field="outfit">${htmlOption("none", "none")}${htmlOptGroup("Girl Outfits", girlOutfits.filter(x => x !== "none"))}${htmlOptGroup("Guy Outfits", guyOutfits.filter(x => x !== "none"))}</select></div>
+        <div><label>Hairstyle ${n}</label><select data-pose-slot="${n}" data-pose-field="hairstyle">${htmlOption("none", "none")}${htmlOptGroup(currentHairLabel, currentHairOptions.filter(x => x !== "none"))}</select></div>
+        <div><label>Accessory / Prop ${n}</label><select data-pose-slot="${n}" data-pose-field="accessory">${elements.map(item => htmlOption(item, item)).join("")}</select></div>
+        <div><label>Custom Details ${n}</label><textarea class="poseSlotDetails" data-pose-slot="${n}" data-pose-field="details" placeholder="Example: add bonnet, leather pants, iced coffee, laptop stickers, red nails, same face, same body..."></textarea></div>
+      </div>
+    </div>`;
+  }).join("");
+
+  holder.innerHTML = `<div class="poseBuilderIntro">Use these slots when you want ONE character shown in different versions. Set Number of Character Variations, then fill that many pose slots. Typography stickers and selected elements can still appear on the sheet.</div>${slotCards}`;
+  updatePoseSlotGenderHairOptions();
+}
+
+function selectPoseGroup(cat, checked){
+  document.querySelectorAll(`input[data-pose-cat="${cat}"]`).forEach(cb => cb.checked = checked);
+}
+
+function getPoseBuilderSlots(gender, count){
+  const desired = parseInt(count, 10);
+  const usableCount = Number.isFinite(desired) && desired > 0 ? Math.min(desired, 10) : 6;
+  const slots = [];
+  for(let i = 1; i <= usableCount; i++){
+    const getField = (field) => {
+      const el = document.querySelector(`[data-pose-slot="${i}"][data-pose-field="${field}"]`);
+      return el ? el.value.trim() : "";
+    };
+    slots.push({number:i, pose:getField("pose") || "none", outfit:getField("outfit") || "none", hairstyle:getField("hairstyle") || "none", accessory:getField("accessory") || "none", details:getField("details") || ""});
+  }
+  return {usableCount, slots};
+}
+
+function getSelectedPoseVariations(gender){
+  const countSelect = document.querySelector('[data-category="Number of Character Variations"] select');
+  const built = getPoseBuilderSlots(gender, countSelect ? countSelect.value : "6");
+  return built.slots.map(slot => slot.pose).filter(pose => pose && pose !== "none");
+}
+
+function getAdaptivePoseCoordination(adaptiveValue, poseValue){
+  if(!adaptiveValue || adaptiveValue === "none") return "";
+  const adaptive = adaptiveValue.toLowerCase();
+  const pose = (poseValue || "").toLowerCase();
+  let rule = `Coordinate this pose with ${adaptiveValue}; the adaptive detail must be visible, respectful, stylish, and physically believable.`;
+
+  if(adaptive.includes("wheelchair")){
+    rule = `Perform this as a wheelchair-friendly pose: keep the character seated in the selected wheelchair, confident and fully visible. If the chosen pose says walking, running, standing, dancing, or jumping, reinterpret it as a seated wheelchair version with matching energy.`;
+  } else if(adaptive.includes("walker")){
+    rule = `Perform this with the walker naturally included: hands/body should connect to the walker when needed, with a balanced confident stance or seated/standing transition that makes sense.`;
+  } else if(adaptive.includes("crutch")){
+    rule = `Perform this with crutches naturally supporting the pose; keep crutches visible and connected to the hands/body, not floating or forgotten.`;
+  } else if(adaptive.includes("white cane") || adaptive.includes("cane user")){
+    rule = `Perform this with the cane naturally held or used for balance/navigation; keep the cane visible and matched to the pose.`;
+  } else if(adaptive.includes("prosthetic leg")){
+    rule = `Show the prosthetic leg clearly and naturally in the pose; adjust foot placement, walking, sitting, or action details so the body mechanics make sense.`;
+  } else if(adaptive.includes("prosthetic arm") || adaptive.includes("prosthetic hand")){
+    rule = `Show the prosthetic arm/hand clearly and naturally; adjust holding, pointing, waving, or accessory placement so the action makes sense.`;
+  } else if(adaptive.includes("hearing aid") || adaptive.includes("cochlear")){
+    rule = `Keep the hearing device visible and intentional; pose can remain the selected action, but hair/accessories should not hide the device completely.`;
+  } else if(adaptive.includes("service dog") || adaptive.includes("guide dog")){
+    rule = `Include the dog beside the character with leash/harness if appropriate; keep the dog supportive and connected to the pose without blocking the character.`;
+  } else if(adaptive.includes("brace")){
+    rule = `Show the brace naturally on the correct body area and adapt the pose so the brace placement and movement look believable.`;
+  } else if(adaptive.includes("oxygen")){
+    rule = `Keep the oxygen tube visible and comfortable; adapt the pose so the tube placement looks safe, natural, and not tangled.`;
+  } else if(adaptive.includes("insulin pump") || adaptive.includes("medical alert")){
+    rule = `Keep the medical device visible but integrated into the outfit; pose stays stylish and natural without making the device look random.`;
+  } else if(adaptive.includes("disabled but able") || adaptive.includes("visible disability") || adaptive.includes("adaptive fashion")){
+    rule = `Make this a disabled-but-able confident pose with adaptive styling built into the body language, outfit, and prop placement; avoid pity poses or helpless framing.`;
+  }
+
+  if(pose.includes("walking") || pose.includes("running") || pose.includes("heels") || pose.includes("jump") || pose.includes("standing")){
+    rule += ` Convert any impossible movement into an equivalent confident adaptive pose instead of ignoring the selected disability option.`;
+  }
+  return rule;
+}
+
+function formatPoseBuilderSlots(builder, adaptiveValue){
+  const selectedAdaptive = adaptiveValue && adaptiveValue !== "none" ? adaptiveValue : "none selected";
+  const lines = builder.slots.map(slot => {
+    const parts = [];
+    const poseText = slot.pose !== "none" ? slot.pose : "create a unique natural pose that does not duplicate another slot";
+    const adaptiveRule = adaptiveValue && adaptiveValue !== "none" ? getAdaptivePoseCoordination(adaptiveValue, poseText) : "No adaptive/disability option selected; keep the pose natural and aligned with the character.";
+
+    parts.push(`${slot.number}. Same character version ${slot.number}`);
+    parts.push(`   - Pose: ${poseText}`);
+    parts.push(`   - Outfit: ${slot.outfit !== "none" ? slot.outfit : "keep outfit aligned with the selected character style"}`);
+    parts.push(`   - Hairstyle: ${slot.hairstyle !== "none" ? slot.hairstyle : "keep the locked base hairstyle unless custom details say otherwise"}`);
+    parts.push(`   - Accessory / prop: ${slot.accessory !== "none" ? slot.accessory : "none unless needed for the pose"}`);
+    parts.push(`   - Adaptive pose coordination: match this pose to the selected Adaptive / Disability Representation. Keep mobility aids, prosthetics, hearing aids, service dog, seated positioning, or support props consistent and natural for this character.`);
+    parts.push(`   - Selected adaptive/disability option for this slot: ${selectedAdaptive}`);
+    parts.push(`   - Adaptive detail for this slot: ${adaptiveRule}`);
+    if(slot.details) parts.push(`   - Custom details: ${slot.details}`);
+    return parts.join("\n");
+  });
+  return {usableCount:builder.usableCount, lines:lines.join("\n\n")};
+}
+
+function formatPoseVariationList(poses, count){
+  const builder = getPoseBuilderSlots("girl", count);
+  return formatPoseBuilderSlots(builder, "");
+}
+
+
+function toggleBottomBannerColorControls(){
+  const mode = document.getElementById("bottomBannerColorMode");
+  const panel = document.getElementById("bottomBannerCustomColors");
+  if(!mode || !panel) return;
+  panel.classList.toggle("hidden", mode.value !== "custom color or gradient");
+}
+
+function getBottomBannerColorDirection(){
+  const mode = document.getElementById("bottomBannerColorMode") ? document.getElementById("bottomBannerColorMode").value : "auto match";
+  const hex = document.getElementById("bottomBannerHex") ? document.getElementById("bottomBannerHex").value.trim() : "";
+  const c1 = document.getElementById("bottomBannerColor1") ? document.getElementById("bottomBannerColor1").value : "";
+  const c2 = document.getElementById("bottomBannerColor2") ? document.getElementById("bottomBannerColor2").value : "";
+  if(mode === "auto match") return "auto match the selected design colors";
+  return hex || `custom color / gradient using ${c1} and ${c2}`;
+}
+
+function toggleWebsiteMockupBackgroundControls(){
+  const mode = document.getElementById("websiteMockupBackgroundMode");
+  const panel = document.getElementById("websiteMockupBackgroundCustomColors");
+  if(!mode || !panel) return;
+  panel.classList.toggle("hidden", mode.value !== "custom color or gradient");
+}
+
+function getWebsiteMockupBackgroundDirection(){
+  const mode = document.getElementById("websiteMockupBackgroundMode") ? document.getElementById("websiteMockupBackgroundMode").value : "auto match";
+  const hex = document.getElementById("websiteMockupBackgroundHex") ? document.getElementById("websiteMockupBackgroundHex").value.trim() : "";
+  const c1 = document.getElementById("websiteMockupBackgroundColor1") ? document.getElementById("websiteMockupBackgroundColor1").value : "";
+  const c2 = document.getElementById("websiteMockupBackgroundColor2") ? document.getElementById("websiteMockupBackgroundColor2").value : "";
+  if(mode === "auto match") return "auto match the selected design colors";
+  return hex || `custom website mockup background color / gradient using ${c1} and ${c2}`;
+}
+
+const controls = document.getElementById("controls");
+const locks = {};
+
+Object.entries(categories).forEach(([name, opts]) => {
+  locks[name] = false;
+  const card = document.createElement("div");
+  card.className = "card";
+  card.dataset.category = name;
+  const bottomBannerControls = name === "Bottom Branding Banner" ? `
+    <label style="margin-top:12px">Bottom Branding Banner Text <span class="note">optional</span></label>
+    <textarea id="bottomBannerText" placeholder="Example: CHIBI STICKER PACK - BY GLAMOROUSGRAMMYGLOWUP" style="margin-top:10px;min-height:70px"></textarea>
+    <label style="margin-top:12px">Bottom Banner Color Control <span class="note">2 choices only</span></label>
+    <select id="bottomBannerColorMode" onchange="toggleBottomBannerColorControls()">
+      <option value="auto match">auto match</option>
+      <option value="custom color or gradient">custom color or gradient</option>
+    </select>
+    <div id="bottomBannerCustomColors" class="bannerColorGrid hidden">
+      <div>
+        <label>Hex Code / Gradient Notes</label>
+        <input id="bottomBannerHex" placeholder="Example: #ffffff or linear-gradient(#ff3fb7,#3c63ff)">
+      </div>
+      <div>
+        <label>Color Picker 1</label>
+        <input id="bottomBannerColor1" type="color" value="#ff3fb7">
+      </div>
+      <div>
+        <label>Color Picker 2</label>
+        <input id="bottomBannerColor2" type="color" value="#3c63ff">
+      </div>
+    </div>
+  ` : "";
+  const websiteMockupBackgroundControls = name === "Website Mockup Background" ? `
+    <label style="margin-top:12px">Website Mockup Background Color Control <span class="note">2 choices only</span></label>
+    <select id="websiteMockupBackgroundMode" onchange="toggleWebsiteMockupBackgroundControls()">
+      <option value="auto match">auto match</option>
+      <option value="custom color or gradient">custom color or gradient</option>
+    </select>
+    <div id="websiteMockupBackgroundCustomColors" class="bannerColorGrid hidden">
+      <div>
+        <label>Hex Code / Gradient Notes</label>
+        <input id="websiteMockupBackgroundHex" placeholder="Example: #ffffff or linear-gradient(#ff3fb7,#3c63ff)">
+      </div>
+      <div>
+        <label>Color Picker 1</label>
+        <input id="websiteMockupBackgroundColor1" type="color" value="#ff3fb7">
+      </div>
+      <div>
+        <label>Color Picker 2</label>
+        <input id="websiteMockupBackgroundColor2" type="color" value="#3c63ff">
+      </div>
+    </div>
+  ` : "";
+  card.innerHTML = `
+    <label>${name}<button class="lock" type="button" onclick="toggleLock('${name}', this)">Unlocked</button></label>
+    <select id="${safeId(name)}" onchange="handleControlChange('${name}')">${opts.map(o=>`<option value="${o}">${o}</option>`).join("")}</select>
+    ${(name === "Bottom Branding Banner" || name === "Website Mockup Background") ? "" : `<textarea id="${safeId(name)}_custom" class="categoryCustom" placeholder="${name === 'Custom Typography Sticker' ? 'Write your exact quote(s) here. This becomes a sticker inside the pack, not the headline.' : 'Custom ' + name + ' details...'}" style="margin-top:10px;min-height:70px"></textarea>`}
+    ${bottomBannerControls}
+    ${websiteMockupBackgroundControls}
+  `;
+  controls.appendChild(card);
+});
+
+function safeId(str){return str.replace(/[^a-z0-9]/gi,"_");}
+function setVal(name,val){document.getElementById(safeId(name)).value = val;}
+function getVal(name){return document.getElementById(safeId(name)).value;}
+
+function placePoseBuilderNextToCreationMode(){
+  const section = document.getElementById("poseSlotBuilderSection");
+  const creationCard = document.querySelector('[data-category="Creation Mode"]');
+  const controls = document.getElementById("controls");
+  if(!section || !creationCard || !controls) return;
+
+  let pair = document.getElementById("creationPosePair");
+  if(!pair){
+    pair = document.createElement("div");
+    pair.id = "creationPosePair";
+    pair.className = "creationPosePair";
+    controls.insertBefore(pair, controls.firstChild);
+  }
+
+  pair.appendChild(creationCard);
+  pair.appendChild(section);
+}
+
+function updatePoseSlotVisibility(){
+  const countSelect = document.getElementById(safeId("Number of Character Variations"));
+  const raw = countSelect && countSelect.value !== "none" ? parseInt(countSelect.value, 10) : 6;
+  const count = Number.isFinite(raw) ? Math.min(Math.max(raw, 1), 10) : 6;
+  document.querySelectorAll('[data-pose-builder-slot]').forEach(card => {
+    const n = parseInt(card.dataset.poseBuilderSlot, 10);
+    card.classList.toggle("hidden", n > count);
+  });
+}
+
+function handleControlChange(name){
+  if(name === "Creation Mode") applyCreationModeUI();
+  if(name === "Number of Character Variations") updatePoseSlotVisibility();
+  if(name === "Character Sticker" || name === "Character Sticker - Guys") updateSmartPoseDropdowns(false);
+  if(name === "Character Sticker" || name === "Character Sticker - Guys" || name === "Header Card Design") updatePoseSlotGenderHairOptions();
+}
+
+function applyCreationModeUI(){
+  const modeSelect = document.getElementById(safeId("Creation Mode"));
+  if(!modeSelect) return;
+  const mode = (modeSelect.value || "none").toLowerCase();
+  const tip = document.getElementById("modeTip");
+  const poseSection = document.getElementById("poseSlotBuilderSection");
+  if(poseSection){
+    const showPoseBuilder = mode.includes("same character pose");
+    poseSection.classList.toggle("hidden", !showPoseBuilder);
+    if(showPoseBuilder) updatePoseSlotVisibility();
+  }
+  const dim = new Set();
+
+  if(mode.includes("single sticker")){
+    ["Pack Character Source","Uploaded Character Count","Character Placement In Pack","Package Mockup","Header Card Design","Bottom Branding Banner","Top Callout Badge","Sticker Arrangement"].forEach(x=>dim.add(x));
+    if(tip) tip.textContent = "Single sticker mode: creates ONE isolated sticker element, quote, or object. Pack layout and packaging settings will be ignored.";
+  } else if(mode.includes("single character")){
+    ["Pack Character Source","Uploaded Character Count","Character Placement In Pack","Package Mockup","Header Card Design","Bottom Branding Banner","Top Callout Badge","Sticker Arrangement"].forEach(x=>dim.add(x));
+    if(tip) tip.textContent = "Single character mode: creates ONE full-body character sticker PNG. Pack layout and packaging settings will be ignored.";
+  } else if(mode.includes("same character pose") && !mode.includes("mockup") && !mode.includes("plastic")){
+    ["Package Mockup","Header Card Design","Bottom Branding Banner","Top Callout Badge","Pack Character Source","Uploaded Character Count","Character Placement In Pack"].forEach(x=>dim.add(x));
+    if(tip) tip.textContent = "Same character pose sheet mode: creates ONE locked character repeated in your selected number of poses, with typography and elements allowed on the printable sheet.";
+  } else if(mode.includes("same character pose") && (mode.includes("mockup") || mode.includes("plastic"))){
+    ["Pack Character Source","Uploaded Character Count","Character Placement In Pack"].forEach(x=>dim.add(x));
+    if(tip) tip.textContent = "Same character pose mockup mode: creates ONE locked character pose set inside a glossy retail sticker pack mockup.";
+  } else if(mode.includes("sticker pack") && !mode.includes("mockup") && !mode.includes("plastic")){
+    ["Package Mockup","Header Card Design","Bottom Branding Banner","Top Callout Badge"].forEach(x=>dim.add(x));
+    if(tip) tip.textContent = "Sticker pack layout mode: creates multiple separated stickers or a sticker sheet. Plastic packaging settings will be ignored.";
+  } else if(mode.includes("mockup") || mode.includes("plastic")){
+    if(tip) tip.textContent = "Plastic packaging mockup mode: creates the full sticker pack product mockup with pouch, header card, badge, and banner.";
+  } else {
+    if(tip) tip.textContent = "Choose Creation Mode first: single sticker, single character, sticker pack layout, or plastic packaging mockup.";
+  }
+
+  document.querySelectorAll(".card[data-category]").forEach(card => {
+    const cat = card.dataset.category;
+    card.classList.toggle("dimmed", dim.has(cat));
+  });
+}
+
+function getCategoryCustomDetails(){
+  const lines = [];
+  Object.keys(categories).forEach(name => {
+    const box = document.getElementById(safeId(name) + "_custom");
+    if(box && box.value.trim()){
+      lines.push(`- ${name}: ${box.value.trim()}`);
+    }
+  });
+  return lines.length ? lines.join("\n") : "";
+}
+
+
+const defaultGirlPoseOptions = [
+  "none","standing confident hands on hips","one hand on hip","selfie pose","peace sign pose","waving pose","heart hands pose","walking forward pose","sitting cute pose","pointing pose"
+];
+
+const defaultGuyPoseOptions = [
+  "none","standing pose","hands-in-pocket pose","arms-crossed pose","holding phone pose","adjusting sunglasses pose","walking forward pose","pointing at viewer pose","holding coffee cup pose","confident full-body pose"
+];
+
+const girlPoseGroups = {
+  business: ["none","boss desk pose","holding laptop","holding planner","on phone pose","selfie pose","pointing pose","standing confident hands on hips","walking forward pose","one hand on hip"],
+  birthday: ["none","celebration pose","holding gift box pose","holding cake pose","balloon pose","blowing a kiss","heart hands pose","confetti celebration pose","cute shy pose","waving pose"],
+  beauty: ["none","holding makeup palette","holding lip gloss","holding nail polish bottle","holding perfume bottle","putting on sunglasses","adjusting sunglasses","blowing a kiss","one hand on hip","selfie pose"],
+  coffee: ["none","holding coffee cup","holding phone and coffee","brunch drink pose","boss desk pose","on phone pose","sitting cute pose","walking forward pose","waving pose","cute shy pose"],
+  fashion: ["none","runway pose","walking in heels","looking over shoulder","over-the-shoulder wink","side-step fashion pose","one hand on hip","both hands on hips","adjusting sunglasses","bold baddie stance"],
+  glam: ["none","bold baddie stance","throwing glitter pose","holding crown","blowing a kiss","heart hands pose","runway pose","one hand on hip","standing confident hands on hips","over-the-shoulder wink"],
+  party: ["none","celebration pose","dancing pose","brunch drink pose","throwing glitter pose","heart hands pose","peace sign pose","blowing a kiss","waving pose","side-step fashion pose"],
+  pet: ["none","holding puppy pose","holding kitten pose","pet cuddle pose","pet leash pose","kneeling with pet pose","heart hands pose","sitting cute pose","waving pose","selfie with pet pose"],
+  sports: ["none","holding basketball pose","game day pose","MVP trophy pose","cheer pose","boxing stance pose","yoga stretch pose","running pose","victory pose","team spirit pose"],
+  travel: ["none","airport luggage pose","walking forward pose","selfie pose","peace sign pose","holding phone pose","holding coffee cup","looking over shoulder","sunglasses pose","waving pose"],
+  cozy: ["none","sitting cute pose","cute shy pose","holding coffee cup","heart hands pose","waving pose","cozy blanket pose","phone scroll pose","peace sign pose","relaxed lounge pose"]
+};
+
+const guyPoseGroups = {
+  business: ["none","CEO stance pose","boss desk pose","holding laptop pose","holding phone pose","buttoning blazer pose","adjusting watch pose","money moves pose","pointing at viewer pose","confident full-body pose"],
+  birthday: ["none","birthday cake pose","holding gift box pose","confetti celebration pose","arms open celebration pose","party cup pose","cheers pose","peace sign pose","pointing at viewer pose","holding trophy pose"],
+  creator: ["none","camera vlogger pose","holding phone pose","ring light pose","podcast microphone pose","holding laptop pose","selfie pose","pointing at viewer pose","headphones gaming pose","work from home pose"],
+  fashion: ["none","cool street walk pose","adjusting sunglasses pose","fixing jacket collar pose","denim jacket pose","leather jacket pose","one hand in pocket pose","crouched sneaker pose","pointing to sneakers pose","airport fit pose"],
+  fitness: ["none","gym dumbbell pose","lifting weights pose","boxing guard pose","boxing gloves up pose","champion pose","fist pump pose","holding trophy pose","pointing at viewer pose","MVP pose"],
+  gaming: ["none","gaming controller pose","headphones gaming pose","arcade winner pose","sitting gamer pose","thumbs up pose","pointing at viewer pose","holding snack pose","celebration pose","focused gamer pose"],
+  glam: ["none","king energy crown pose","adjusting sunglasses pose","holding gold chain pose","grillz smile pose","money moves pose","CEO stance pose","one hand in pocket pose","holding trophy pose","confident full-body pose"],
+  music: ["none","microphone performance pose","DJ headphones pose","holding microphone pose","studio recording pose","music artist stance pose","peace sign pose","pointing at viewer pose","dance pose","champion pose"],
+  pet: ["none","pet dad holding puppy pose","pet dad holding kitten pose","dog leash walking pose","kneeling with pet pose","holding pet bowl pose","heart hands pose","peace sign pose","sitting with pet pose","selfie with pet pose"],
+  sports: ["none","basketball dribble pose","basketball dunk pose","holding basketball pose","football catching pose","holding football pose","baseball bat pose","holding soccer ball pose","holding trophy pose","MVP pose"],
+  travel: ["none","airport fit pose","holding luggage pose","holding coffee cup pose","holding phone pose","adjusting sunglasses pose","walking forward pose","peace sign pose","leaning against wall pose","travel selfie pose"],
+  work: ["none","medical worker pose","chef pose","mechanic wrench pose","teacher pointer pose","truck driver pose","barber clippers pose","work badge pose","standing work pose","thumbs up pose"],
+  college: ["none","leaning against locker pose","one foot up on locker pose","holding books casual pose","backpack over one shoulder pose","checking phone by locker pose","locker door open chill pose","arms crossed by locker pose","sitting hallway bench pose","walking hallway confidence pose"]
+};
+
+function pickPoseGroup(character, gender){
+  const c = (character || "").toLowerCase();
+  if(gender === "guy"){
+    if(/basketball|football|baseball|soccer|sports|mvp|skateboard|roller/.test(c)) return "sports";
+    if(/fitness|gym|boxing/.test(c)) return "fitness";
+    if(/gamer|gaming|arcade/.test(c)) return "gaming";
+    if(/music|dj|microphone|podcast|artist/.test(c)) return "music";
+    if(/birthday|party|celebration/.test(c)) return "birthday";
+    if(/pet|dog|cat/.test(c)) return "pet";
+    if(/business|boss|entrepreneur|laptop|tech|digital|creator|camera|ring light|work from home/.test(c)) return c.includes("creator") || c.includes("camera") || c.includes("ring light") ? "creator" : "business";
+    if(/travel|airport|beach/.test(c)) return "travel";
+    if(/college|student|school|campus/.test(c)) return "college";
+    if(/streetwear/.test(c)) return "college";
+    if(/chef|medical|nurse|teacher|truck|barber|mechanic/.test(c)) return "work";
+    if(/king|gold|luxury|money|grillz/.test(c)) return "glam";
+    if(/fashion|sneaker|hoodie|jacket|tracksuit|tux|suit|denim|leather|cowboy/.test(c)) return "fashion";
+    return "glam";
+  }
+  if(/basketball|football|soccer|tennis|volleyball|track|gym|yoga|boxing|cheer/.test(c)) return "sports";
+  if(/birthday|cake|gift|balloon|party|disco|new year/.test(c)) return "birthday";
+  if(/makeup|nail|hair|beauty|spa|curlers|robe|self-care/.test(c)) return "beauty";
+  if(/coffee|brunch|cafe/.test(c)) return "coffee";
+  if(/pet|dog|cat|puppy|kitten/.test(c)) return "pet";
+  if(/business|boss|digital|creator|etsy|laptop|phone|ring light|camera|planner|teacher|nurse|medical/.test(c)) return "business";
+  if(/travel|airport|beach|summer|winter|fall|holiday/.test(c)) return "travel";
+  if(/pajama|slipper|cozy|lounge/.test(c)) return "cozy";
+  if(/fashion|dress|heels|handbag|sunglasses|runway|outfit|leather|denim|sequin|tracksuit|streetwear|boutique|cowgirl|western|leopard/.test(c)) return "fashion";
+  if(/queen|glam|gold|money|main character|confidence|unbothered/.test(c)) return "glam";
+  return "glam";
+}
+
+function setSelectOptions(selectName, options){
+  const select = document.getElementById(safeId(selectName));
+  if(!select) return;
+  const current = select.value;
+  select.innerHTML = options.map(o => `<option value="${o}">${o}</option>`).join("");
+  select.value = options.includes(current) ? current : "none";
+}
+
+function updateSmartPoseDropdown(gender, pickRandom=false){
+  const charName = gender === "guy" ? "Character Sticker - Guys" : "Character Sticker";
+  const poseName = gender === "guy" ? "Guy Pose / Action" : "Pose / Action";
+  const character = getVal(charName);
+  const group = pickPoseGroup(character, gender);
+  const options = gender === "guy" ? (guyPoseGroups[group] || defaultGuyPoseOptions) : (girlPoseGroups[group] || defaultGirlPoseOptions);
+  setSelectOptions(poseName, options);
+  if(pickRandom && !locks[poseName]){
+    const select = document.getElementById(safeId(poseName));
+    if(select && options.length > 1) select.value = options[Math.floor(Math.random() * (options.length - 1)) + 1];
+  }
+}
+
+function updateSmartPoseDropdowns(pickRandom=false){
+  updateSmartPoseDropdown("girl", pickRandom);
+  updateSmartPoseDropdown("guy", pickRandom);
+}
+
+function initSmartPoseFilters(){
+  const girlChar = document.getElementById(safeId("Character Sticker"));
+  const guyChar = document.getElementById(safeId("Character Sticker - Guys"));
+  if(girlChar) girlChar.addEventListener("change", () => updateSmartPoseDropdown("girl"));
+  if(guyChar) guyChar.addEventListener("change", () => updateSmartPoseDropdown("guy"));
+  updateSmartPoseDropdowns(false);
+}
+
+function toggleLock(name, btn){
+  locks[name] = !locks[name];
+  btn.classList.toggle("on", locks[name]);
+  btn.textContent = locks[name] ? "Locked" : "Unlocked";
+}
+
+function loadReferencePreset(){
+  setVal("Package Mockup","clear glossy plastic sticker pouch");
+  setVal("Header Card Design","black leopard print header card");
+  setVal("Custom Typography Sticker","custom sticker words in bubble letters");
+  setVal("Main Center Quote Sticker","BOSS BABE");
+  checkPackElement("black quilted handbag with gold chain", true);
+  setVal("Sticker Arrangement","large title sticker at top with accessories below");
+  setVal("Backing Color","soft blush pink backing");
+  setVal("Finish Quality","premium Etsy listing photo");
+  if(document.getElementById("custom")) document.getElementById("custom").value = "Recreate the sticker-pack elements from the reference: pink glitter lips, gold crown with heart jewels, gold stars, pink hearts, black and pink sunglasses, pink drink cup with black heart, black perfume bottle labeled GLAM FUEL, black coffee cup with glam quote, pink quilted handbag, nail polish bottle, pink high heels with bow, heart quote sticker, confidence quote sticker, pretty focused quote sticker, and polished glam sticker arrangement.";
+  generatePrompt();
+}
+
+
+
+function getCharacterIdentity(identity, gender){
+  const cleanIdentity = identity && identity !== "none" ? identity : "dark brown skin, curvy body, glossy doll face, long curly black hair";
+  const isGuy = gender === "guy";
+  const label = isGuy ? "same exact guy every time" : "same exact girl every time";
+  const pronoun = isGuy ? "male" : "female";
+  const featureRule = isGuy
+    ? "same face, same skin tone, same body type, same haircut, same facial hair if included, same proportions"
+    : "same face, same skin tone, same body type, same hairstyle, same facial features, same proportions";
+  return `LOCKED CHARACTER IDENTITY: ${label}. ${cleanIdentity}. Keep this exact ${pronoun} character identity locked across every generation: ${featureRule}. Do not change identity. Only change outfit, pose, accessory, sticker theme, and expression when selected.`;
+}
+
+function getSmartMatch(vibe){
+  const matches = {
+    "Boss Babe": {accessory:"black quilted handbag with gold chain", quote:"BOSS BABE", outfit:"black blazer, pink top, glam pants", pose:"confident hands-on-hip pose"},
+    "Coffee And Goals": {accessory:"black coffee cup with glam quote", quote:"GOOD COFFEE BIG GOALS", outfit:"cozy chic pink and black outfit", pose:"holding coffee cup pose"},
+    "Shopping Spree": {accessory:"pink shopping bag", quote:"Big Purse Big Plans", outfit:"boutique shopping outfit", pose:"walking with shopping bags pose"},
+    "Glam Night Out": {accessory:"pink high heel with bow", quote:"MAKING MOVES IN HEELS", outfit:"sparkly glam night-out outfit", pose:"one leg popped fashion pose"},
+    "Soft Life": {accessory:"pink drink cup with black heart", quote:"Soft Life Loaded", outfit:"soft cozy lounge set", pose:"relaxed cute pose"},
+    "Booked And Busy": {accessory:"pink phone case", quote:"Booked Busy And Bougie", outfit:"boss babe streetwear outfit", pose:"phone-in-hand busy pose"},
+    "Content Creator": {accessory:"pink phone case", quote:"Content Queen Energy", outfit:"trendy creator outfit", pose:"selfie pose with phone"},
+    "Self Care Queen": {accessory:"pink nail polish bottle", quote:"Polished And Powerful", outfit:"cute robe-inspired glam outfit", pose:"beauty pose"},
+    "Luxury Lifestyle": {accessory:"gold crown with heart jewels", quote:"Luxury Looks Loud", outfit:"black and gold glam outfit", pose:"elegant standing pose"},
+    "Sneaker Girl": {accessory:"black and pink sunglasses", quote:"Cute Face Loud Style", outfit:"graffiti streetwear with matching sneakers", pose:"cool sneaker stance"},
+    "Makeup Glam": {accessory:"makeup palette", quote:"Glam Mode On", outfit:"pink beauty boss outfit", pose:"holding makeup palette pose"},
+    "Phone Call Bestie": {accessory:"pink phone case", quote:"Cute But Not Quiet", outfit:"Y2K glam outfit", pose:"phone call pose"},
+    "Confidence Queen": {accessory:"mini gold crown", quote:"Confidence Is My Best Accessory", outfit:"royal blue and gold outfit", pose:"power pose"},
+    "Unbothered Energy": {accessory:"black and pink sunglasses", quote:"Pretty Focused And Unbothered", outfit:"black leather baddie outfit", pose:"sunglasses attitude pose"},
+    "Planner Girl": {accessory:"glam compact mirror", quote:"Planner Queen Energy", outfit:"cute desk-day outfit", pose:"holding planner pose"},
+    "Birthday Glam": {accessory:"gold glitter heart", quote:"Birthday Glam Loaded", outfit:"sparkly party outfit", pose:"celebration pose"},
+    "Money Moves": {accessory:"black shopping bag", quote:"Making Money Moves", outfit:"boss luxury outfit", pose:"walking forward pose"},
+    "Cute But Loud": {accessory:"pink glitter lips", quote:"Cute Face Loud Style No Chill", outfit:"bold pink and black outfit", pose:"playful tongue-out pose"},
+    "Pink Power": {accessory:"pink glitter heart", quote:"Pink Power Energy", outfit:"hot pink glam outfit", pose:"cute confident pose"},
+    "Royal Blue Glam": {accessory:"gold crown with heart jewels", quote:"Glam Goals Only", outfit:"royal blue outfit with gold accents", pose:"main-character stance"},
+    "Leopard Luxe": {accessory:"pink leopard heart", quote:"Too Glam To Dim", outfit:"pink leopard glam outfit", pose:"fashion pose"},
+    "Glitter And Gloss": {accessory:"glitter sparkle burst", quote:"Big Gloss Big Goals", outfit:"sparkly glossy outfit", pose:"glam sparkle pose"},
+    "Streetwear Baddie": {accessory:"black and pink sunglasses", quote:"Styled And Unbothered", outfit:"oversized jacket, fitted pants, sneakers", pose:"streetwear stance"},
+    "Cozy But Cute": {accessory:"black coffee cup with glam quote", quote:"Cozy But Cute", outfit:"soft lounge set", pose:"cozy standing pose"},
+    "Brunch Babe": {accessory:"pink drink cup with black heart", quote:"Brunch Babe Energy", outfit:"cute brunch outfit", pose:"drink-in-hand pose"},
+    "Boss Desk": {accessory:"lip gloss tube", quote:"Bossy Glossy Blessed", outfit:"work-from-home glam outfit", pose:"desk boss pose"},
+    "Beauty Bar": {accessory:"black perfume bottle labeled GLAM FUEL", quote:"Glam Fuel", outfit:"beauty boutique outfit", pose:"holding perfume pose"},
+    "Weekend Slay": {accessory:"pink high heel with bow", quote:"Slay The Day", outfit:"weekend glam outfit", pose:"walking pose"},
+    "Main Character": {accessory:"gold crown with heart jewels", quote:"Main Character Energy", outfit:"statement glam outfit", pose:"center-stage pose"},
+    "Goal Getter": {accessory:"black coffee cup with glam quote", quote:"Big Goals Big Gloss", outfit:"focused boss outfit", pose:"determined pose"},
+    "Soft But Strong": {accessory:"pink glitter heart", quote:"Soft But Strong", outfit:"soft pink power outfit", pose:"gentle confident pose"},
+    "Too Glam": {accessory:"pink glitter lips", quote:"Too Glam To Give A Damn", outfit:"hot pink glam outfit", pose:"sass pose"},
+    "Queen Energy": {accessory:"mini gold crown", quote:"Sticker Queen Status", outfit:"gold accented glam outfit", pose:"queen pose"},
+    "Pretty Focused": {accessory:"pink phone case", quote:"Pretty Focused And Unbothered", outfit:"clean boss outfit", pose:"focused phone pose"},
+    "Chill But Expensive": {accessory:"black quilted handbag with gold chain", quote:"Chill But Expensive", outfit:"luxury casual outfit", pose:"cool relaxed pose"},
+    "Sticker Boss": {accessory:"pink shopping bag", quote:"Sticker Boss Energy", outfit:"creative business outfit", pose:"boss pose"},
+    "Glam Fuel": {accessory:"black perfume bottle labeled GLAM FUEL", quote:"Glam Fuel", outfit:"beauty glam outfit", pose:"holding glam fuel bottle"},
+    "Good Vibes": {accessory:"gold star", quote:"Good Vibes Big Goals", outfit:"bright cheerful glam outfit", pose:"happy pose"},
+    "Loud Style": {accessory:"pink glitter lips", quote:"Loud Style Soft Heart", outfit:"bold colorful street-glam outfit", pose:"loud fashion pose"},
+    "Digital Product Girl": {accessory:"pink phone case", quote:"Digital Products That Slay", outfit:"creator boss outfit", pose:"holding phone and smiling"}
+  };
+  return matches[vibe] || {accessory:"statement accessory matched to " + vibe, quote:vibe, outfit:"coordinated outfit inspired by " + vibe, pose:"confident full-body pose"};
+}
+
+function generatePrompt(){
+  const selected = {};
+  Object.keys(categories).forEach(name => selected[name] = getVal(name));
+  const custom = document.getElementById("custom") ? document.getElementById("custom").value.trim() : "";
+  const singleElementCustom = document.getElementById("singleElementCustom") ? document.getElementById("singleElementCustom").value.trim() : "";
+  const customCallout = document.getElementById("customCallout") ? document.getElementById("customCallout").value.trim() : "";
+  const bottomBannerText = document.getElementById("bottomBannerText") ? document.getElementById("bottomBannerText").value.trim() : "";
+  const bottomBannerColorMode = document.getElementById("bottomBannerColorMode") ? document.getElementById("bottomBannerColorMode").value : "auto match";
+  const bottomBannerColorDirection = getBottomBannerColorDirection();
+  const websiteMockupBackgroundMode = document.getElementById("websiteMockupBackgroundMode") ? document.getElementById("websiteMockupBackgroundMode").value : "auto match";
+  const websiteMockupBackgroundDirection = getWebsiteMockupBackgroundDirection();
+  const customOutfit = document.getElementById("customOutfit") ? document.getElementById("customOutfit").value.trim() : "";
+  const categoryCustomDetails = getCategoryCustomDetails();
+  const selectedPackElements = formatSelectedPackElements();
+
+  const mode = selected["Creation Mode"];
+  const modeNormalized = (mode || "none").toLowerCase();
+  const vibe = "custom selected sticker theme";
+  const smart = {accessory:"selected sticker element", quote:"selected typography quote", outfit:"selected outfit direction", pose:"selected pose direction"};
+  const smartStyle = "manual control";
+  const chosenGirlCharacter = selected["Character Sticker"] && selected["Character Sticker"] !== "none"
+    ? selected["Character Sticker"]
+    : "";
+  const chosenGuyCharacter = selected["Character Sticker - Guys"] && selected["Character Sticker - Guys"] !== "none"
+    ? selected["Character Sticker - Guys"]
+    : "";
+  const selectedHeaderLower = ((selected["Header Card Design"] || "") + " " + (selected["Character Sticker"] || "") + " " + (selected["Character Sticker - Guys"] || "")).toLowerCase();
+  let selectedGender = "girl";
+  if(chosenGuyCharacter && !chosenGirlCharacter) selectedGender = "guy";
+  if(chosenGirlCharacter && chosenGuyCharacter){
+    if(selectedHeaderLower.includes("men's")) selectedGender = "guy";
+    else if(selectedHeaderLower.includes("women's")) selectedGender = "girl";
+    else selectedGender = "girl";
+  }
+
+  // Hard gender-lane cleanup for the prompt builder.
+  // This prevents old/randomized opposite-lane values from printing in the final prompt.
+  const girlLaneCategories = ["Character Sticker","Body Type - Girls","Face Style - Girls","Hairstyle - Girls","Makeup - Girls","Beauty Marks - Girls","Earrings - Girls","Nails - Girls","Eyebrows - Girls","Lashes - Girls","Pose / Action","Outfit - Girls"];
+  const guyLaneCategories = ["Character Sticker - Guys","Body Type - Guys","Face Style - Guys","Hairstyle - Guys","Guy Pose / Action","Outfit - Guys"];
+  if(selectedGender === "girl") guyLaneCategories.forEach(cat => selected[cat] = "none");
+  if(selectedGender === "guy") girlLaneCategories.forEach(cat => selected[cat] = "none");
+  const selectedSkinTone = selected["Skin Tone"] && selected["Skin Tone"] !== "none" ? selected["Skin Tone"] : "deep espresso skin";
+  const selectedBodyType = selectedGender === "guy"
+    ? (selected["Body Type - Guys"] && selected["Body Type - Guys"] !== "none" ? selected["Body Type - Guys"] : "plus-size body")
+    : (selected["Body Type - Girls"] && selected["Body Type - Girls"] !== "none" ? selected["Body Type - Girls"] : "curvy body");
+  const selectedFaceStyle = selectedGender === "guy"
+    ? (selected["Face Style - Guys"] && selected["Face Style - Guys"] !== "none" ? selected["Face Style - Guys"] : "glossy chibi face")
+    : (selected["Face Style - Girls"] && selected["Face Style - Girls"] !== "none" ? selected["Face Style - Girls"] : "glossy doll face");
+  const selectedHairstyle = selectedGender === "guy"
+    ? (selected["Hairstyle - Guys"] && selected["Hairstyle - Guys"] !== "none" ? selected["Hairstyle - Guys"] : "low taper fade")
+    : (selected["Hairstyle - Girls"] && selected["Hairstyle - Girls"] !== "none" ? selected["Hairstyle - Girls"] : "long curly black hair");
+  const selectedTattoo = selected["Tattoo"] && selected["Tattoo"] !== "none" ? selected["Tattoo"] : "";
+  const poseAction = selectedGender === "guy" && selected["Guy Pose / Action"] && selected["Guy Pose / Action"] !== "none" ? selected["Guy Pose / Action"] : selected["Pose / Action"];
+  const selectedAdaptive = selected["Adaptive / Disability Representation"] && selected["Adaptive / Disability Representation"] !== "none" ? selected["Adaptive / Disability Representation"] : "";
+  const womenOnlyGlamDetails = selectedGender === "girl" ? [
+    selected["Makeup - Girls"] && selected["Makeup - Girls"] !== "none" ? `Makeup: ${selected["Makeup - Girls"]}` : "",
+    selected["Beauty Marks - Girls"] && selected["Beauty Marks - Girls"] !== "none" ? `Beauty marks: ${selected["Beauty Marks - Girls"]}` : "",
+    selected["Earrings - Girls"] && selected["Earrings - Girls"] !== "none" ? `Earrings: ${selected["Earrings - Girls"]}` : "",
+    selected["Nails - Girls"] && selected["Nails - Girls"] !== "none" ? `Nails: ${selected["Nails - Girls"]}` : "",
+    selected["Eyebrows - Girls"] && selected["Eyebrows - Girls"] !== "none" ? `Eyebrows: ${selected["Eyebrows - Girls"]}` : "",
+    selected["Lashes - Girls"] && selected["Lashes - Girls"] !== "none" ? `Lashes: ${selected["Lashes - Girls"]}` : ""
+  ].filter(Boolean).join("\n- ") : "";
+  const womenOnlyGlamBlock = womenOnlyGlamDetails ? `
+WOMEN-ONLY GLAM DETAILS:
+- ${womenOnlyGlamDetails}
+` : "";
+  const tattooBlock = selectedTattoo ? `
+TATTOO DETAILS:
+- Tattoo style/location: ${selectedTattoo}
+- Keep tattoo clean, intentional, visible only where natural for the pose and outfit.
+` : "";
+  const adaptiveBlock = selectedAdaptive ? `
+ADAPTIVE / DISABILITY REPRESENTATION:
+- Include: ${selectedAdaptive}
+- Keep the character confident, stylish, capable, respectful, and premium.
+- Make adaptive devices look intentional, polished, and naturally integrated with the pose and outfit.
+- REQUIRED pose coordination rule: ${getAdaptivePoseCoordination(selectedAdaptive, poseAction)}
+- Do not ignore the selected adaptive/disability option. The pose, body position, props, outfit, and sticker styling must visually match it.
+` : "";
+  const identityName = `${selectedSkinTone}, ${selectedBodyType}, ${selectedFaceStyle}, ${selectedHairstyle}`;
+  const identityBlock = getCharacterIdentity(identityName, selectedGender);
+  const outfitMode = selected["Outfit Match Mode"] || "smart auto plus manual outfit";
+  const manualOutfit = selectedGender === "guy"
+    ? (selected["Outfit - Guys"] && selected["Outfit - Guys"] !== "none" ? selected["Outfit - Guys"] : "")
+    : (selected["Outfit - Girls"] && selected["Outfit - Girls"] !== "none" ? selected["Outfit - Girls"] : "");
+  let finalOutfitDirection = smart.outfit;
+  if(outfitMode === "manual outfit only") finalOutfitDirection = manualOutfit || customOutfit || smart.outfit;
+  if(outfitMode === "smart auto outfit only") finalOutfitDirection = smart.outfit;
+  if(outfitMode === "smart auto plus manual outfit") finalOutfitDirection = [smart.outfit, manualOutfit, customOutfit].filter(Boolean).join(" enhanced with ");
+  const chosenCharacter = selectedGender === "guy"
+    ? (chosenGuyCharacter || "plus-size chibi guy")
+    : (chosenGirlCharacter || "plus-size chibi girl");
+
+  const selectedElementList = getFlatSelectedPackElements();
+  const chosenElement = selectedElementList.length ? selectedElementList[0] : smart.accessory;
+
+  const poseVariationCount = selected["Number of Character Variations"] && selected["Number of Character Variations"] !== "none" ? selected["Number of Character Variations"] : "6";
+  const selectedPoseVariations = getSelectedPoseVariations(selectedGender);
+  const posePackInfo = formatPoseVariationList(selectedPoseVariations.length ? selectedPoseVariations : [poseAction].filter(Boolean), poseVariationCount);
+  const poseBuilderInfo = formatPoseBuilderSlots(getPoseBuilderSlots(selectedGender, poseVariationCount), selectedAdaptive);
+
+  const hasCreationMode = modeNormalized && modeNormalized !== "none";
+  const isCharacterOnlyMode = hasCreationMode && (
+    modeNormalized.includes("single character") ||
+    modeNormalized.includes("character png") ||
+    modeNormalized.includes("character sticker") ||
+    modeNormalized.includes("character clipart")
+  );
+
+  const isPackMockupMode = hasCreationMode && (
+    modeNormalized.includes("sticker pack mockup") ||
+    modeNormalized.includes("plastic packaging") ||
+    modeNormalized.includes("retail packaging") ||
+    modeNormalized.includes("package") ||
+    modeNormalized.includes("pouch")
+  );
+
+  const isSameCharacterPosePack = hasCreationMode && modeNormalized.includes("same character pose");
+
+  const isStickerPackLayoutMode = hasCreationMode && !isPackMockupMode && modeNormalized.includes("sticker pack");
+
+  const isSingleElementMode =
+    !isCharacterOnlyMode && hasCreationMode && !isPackMockupMode && (
+      modeNormalized.includes("individual") ||
+      modeNormalized.includes("single") ||
+      modeNormalized.includes("separate") ||
+      modeNormalized.includes("clipart") ||
+      modeNormalized.includes("transparent") ||
+      modeNormalized.includes("planner") ||
+      modeNormalized.includes("without retail")
+    );
+
+  const packSource = selected["Pack Character Source"] || "none";
+  const usesUploadedCharacters = packSource.includes("uploaded");
+  const usesGeneratorCharacters = packSource.includes("generator");
+  const noCharactersPack = packSource.includes("no character");
+  const packOpeningLine = "Create a premium AI image prompt for a sticker pack mockup with glossy plastic packaging using the selected header card design, title style, character stickers, and sticker elements.";
+  const uploadedPngRule = usesUploadedCharacters ? `
+CRITICAL UPLOADED PNG RULE:
+Use the uploaded finished character PNGs exactly as provided. Do not redraw, redesign, replace, restyle, recolor, change faces, change outfits, change poses, change skin tone, change hair, or alter body shape. Treat the uploaded character PNGs like finished sticker assets being placed into the packaging.
+` : "";
+
+  const prompt = isCharacterOnlyMode ? `Create ONE standalone glam character PNG.
+
+CHARACTER SKIN TONE:
+${selectedSkinTone}
+
+CHARACTER BODY TYPE:
+${selectedBodyType}
+
+CHARACTER FACE STYLE:
+${selectedFaceStyle}
+
+CHARACTER HAIRSTYLE:
+${selectedHairstyle}${womenOnlyGlamBlock}${tattooBlock}${adaptiveBlock}
+FULL LOCKED CHARACTER IDENTITY:
+${identityName}
+
+${identityBlock}
+
+POSE / ACTION:
+${poseAction}
+
+CHARACTER DETAILS:
+- Character style: ${chosenCharacter}
+- Outfit base: ${smart.outfit}
+- Outfit match mode: ${outfitMode}
+- Manual outfit add-on: ${manualOutfit || "none"}
+- Custom outfit add-on: ${customOutfit || "none"}
+- Final outfit direction: ${finalOutfitDirection}
+- Pose direction: ${poseAction}
+- Keep the same locked character identity. Only change pose, outfit, accessory, and theme.
+
+THEME: ${vibe}
+
+ACCESSORY: ${smart.accessory}
+→ must be held or worn by the character (NOT floating separately)
+
+QUOTE: ${smart.quote}
+→ must be small, clean, readable, and placed near the character (NOT a separate sticker)
+
+RULES:
+- One character only
+- Full body, head-to-toe
+- Complete body visible, including feet
+- Transparent background
+- Thick white kiss-cut border ONLY around the full design (not separate pieces)
+- No multiple stickers
+- No sticker sheet
+- No scattered elements
+- Keep composition tight and centered
+- Accessories must feel naturally part of the character
+- Quote must enhance, not overpower
+- Outfit selector must enhance the final character styling when Outfit Match Mode says smart auto plus manual outfit
+- Manual outfit choices must stay visible and usable
+
+STYLE:
+ultra-glossy high-definition finish, rich saturated color, hot pink, purple, black, white, metallic gold, glitter accents, clean edges, PNG sticker style, cute glossy chibi/doll-style glam character, big expressive glossy eyes, luminous true-to-selection skin tone, polished airbrushed shading, soft rim light, crisp HD detail, glossy vinyl sticker texture, premium commercial sticker rendering
+
+
+ANTI-ASHY PREMIUM QUALITY LOCK:
+- Use rich saturated color, glossy highlights, crisp HD detail, and clean contrast.
+- Keep skin tones luminous and true-to-selection, never gray, dull, washed out, chalky, muddy, or ashy.
+- Use polished airbrushed shading, soft rim light, realistic specular shine, and high-definition sticker texture.
+- Add premium glossy vinyl finish, sharp edges, smooth gradients, and commercial product clarity.
+- Avoid flat matte color, low contrast, dusty shadows, blurry details, faded colors, dull lighting, and desaturated output.
+
+NEGATIVE:
+no sticker pack, no sticker sheet, no collage, no multiple characters, no floating objects, no product mockup, no packaging, no plastic bag, no header card, no hanging tab, no background scene, no duplicate characters, no cropped body, no blurry face, no warped hands, no unreadable text, no ashy skin, no gray skin, no chalky color, no muddy shadows, no dull lighting, no washed-out color
+${custom ? "\nCUSTOM DETAILS: " + custom : ""}${categoryCustomDetails ? "\n\nCATEGORY CUSTOM DETAILS:\n" + categoryCustomDetails : ""}
+
+Final image: ONE standalone full-body ${chosenCharacter} PNG, same exact ${selectedGender} every time using the locked identity preset, pose changed to ${poseAction}, ${vibe} theme, final outfit direction: ${finalOutfitDirection}, ${smart.accessory} naturally attached, ${smart.quote} placed close, transparent background, thick white border around the full design only, sellable digital sticker character asset.` : isSingleElementMode ? `Create ONE standalone sticker element only.
+
+SELECTED STICKER ELEMENT: ${chosenElement}
+
+This prompt is NOT for a sticker pack.
+This prompt is NOT for a sticker sheet.
+This prompt is NOT for a product mockup.
+This prompt is NOT for plastic packaging.
+
+Create exactly ONE isolated sticker design: ${chosenElement}.
+
+Required output:
+- One single sticker only, centered in the image.
+- No other stickers around it.
+- No collage.
+- No sticker bundle.
+- No packaging, no pouch, no header card, no hanging slot, no sealed plastic bag.
+- Thick white kiss-cut sticker border.
+- Clean transparent background when possible.
+- Leave clear empty space around the sticker.
+- Make it look like a glossy vinyl sticker.
+
+Visual style:
+Use the premium glam sticker reference style: ultra-glossy high-definition finish, rich saturated color, hot pink, purple, black, white, metallic gold, glitter texture, luminous highlights, bold clean shadowing, crisp HD detail, smooth airbrushed gradients, glossy vinyl sticker texture, cute glam boutique energy, high-resolution PNG-style sticker art.
+
+ANTI-ASHY PREMIUM QUALITY LOCK:
+- Use rich saturated color, glossy highlights, crisp HD detail, and clean contrast.
+- Keep skin tones luminous and true-to-selection, never gray, dull, washed out, chalky, muddy, or ashy.
+- Use polished airbrushed shading, soft rim light, realistic specular shine, and high-definition sticker texture.
+- Add premium glossy vinyl finish, sharp edges, smooth gradients, and commercial product clarity.
+- Avoid flat matte color, low contrast, dusty shadows, blurry details, faded colors, dull lighting, and desaturated output.
+
+If the selected sticker contains text:
+- Make the words large and readable.
+- Spell the words correctly.
+- Use glossy bubble/graffiti lettering inspired by the reference.
+
+Selected style options:
+CUSTOM TYPOGRAPHY STICKER: ${selected["Custom Typography Sticker"]}
+TOP CALLOUT BADGE: ${selected["Top Callout Badge"]}
+BOTTOM BRANDING BANNER: ${selected["Bottom Branding Banner"]}
+BOTTOM BRANDING BANNER TEXT: ${bottomBannerText || "none"}
+BOTTOM BANNER COLOR MODE: ${bottomBannerColorMode}
+BOTTOM BANNER COLOR DIRECTION: ${bottomBannerColorDirection}
+QUOTE STYLE: ${selected["Main Center Quote Sticker"]}
+BACKING COLOR: ${selected["Backing Color"]}
+FINISH QUALITY: ${selected["Finish Quality"]}
+
+Negative prompt:
+Do not create a package, mockup, sheet, multiple stickers, scattered sticker set, product photo, plastic glare, retail display, header card, bag seam, hanging tab, or extra objects. No ashy, gray, chalky, washed-out, muddy, dull, blurry, low-contrast, or faded output.
+${singleElementCustom ? "\nSINGLE ELEMENT CUSTOM DETAILS: " + singleElementCustom : ""}${custom ? "\nCUSTOM DETAILS: " + custom : ""}${categoryCustomDetails ? "\n\nCATEGORY CUSTOM DETAILS:\n" + categoryCustomDetails : ""}
+
+Final image: ONE standalone ${chosenElement} sticker, centered, transparent PNG-style, thick white border, glossy glam finish, crisp edges, vibrant pink, purple, black, white, and metallic gold.` : isSameCharacterPosePack ? `Create a premium printable sticker sheet featuring ONE consistent character repeated in ${poseBuilderInfo.usableCount} custom-designed pose variations.
+
+This prompt is for a SAME CHARACTER POSE PACK.
+Do NOT create random different characters.
+Do NOT change the character identity from sticker to sticker.
+
+LOCKED CHARACTER IDENTITY:
+- Character type: ${chosenCharacter}
+- Gender/style lane: ${selectedGender}
+- Skin tone: ${selectedSkinTone}
+- Body type: ${selectedBodyType}
+- Face style: ${selectedFaceStyle}
+- Base hairstyle: ${selectedHairstyle}${womenOnlyGlamBlock}${tattooBlock}${adaptiveBlock}
+- Identity preset: ${identityName}
+
+CHARACTER CONSISTENCY RULES:
+Use the exact same character across every sticker version:
+- same face
+- same skin tone
+- same body type
+- same facial features
+- same age impression
+- same glam cartoon sticker style
+- same overall identity
+- women-only details like makeup, beauty marks, earrings, nails, eyebrows, and lashes only apply when the selected character lane is female
+
+PER-POSE CUSTOM STYLING:
+Create exactly ${poseBuilderInfo.usableCount} separate sticker versions using these slot directions:
+
+${poseBuilderInfo.lines}
+
+IMPORTANT PER-POSE RULES:
+- Each pose slot should look like its own finished sticker.
+- Pose, outfit, hairstyle, prop, and custom details may change per slot.
+- Even when hairstyle or outfit changes, the character must still look like the same person.
+- Do not duplicate poses unless the slot specifically asks for it.
+- Do not add extra characters.
+- Do not turn this into a scene.
+
+TYPOGRAPHY + EXTRA ELEMENTS:
+CUSTOM TYPOGRAPHY STICKER: ${selected["Custom Typography Sticker"]}
+MAIN QUOTE STICKER: ${selected["Main Center Quote Sticker"]}
+SELECTED PACK ELEMENTS:
+${selectedPackElements}
+
+Typography and elements are allowed on this sheet:
+- Add selected quote/word stickers as separate kiss-cut typography stickers.
+- Add selected extra elements as separate sticker elements.
+- Keep text large, readable, correctly spelled, glossy, and clean.
+- Do not use typography as a package headline unless mockup mode is selected.
+
+SHEET LAYOUT:
+- Arrange all ${poseBuilderInfo.usableCount} character stickers in a clean printable sticker sheet layout.
+- Keep every sticker fully visible.
+- Use thick white kiss-cut borders around every character, typography sticker, and element.
+- Leave clean spacing between stickers.
+- No overlapping.
+- White, transparent, or clean printable background.
+- High-resolution sellable printable sticker sheet.
+
+STYLE:
+ultra-glossy high-definition finish, rich saturated color, hot pink, purple, black, white, metallic gold, glitter accents, clean edges, cute glossy chibi/doll-style glam character, big expressive glossy eyes, luminous true-to-selection skin tone, polished airbrushed shading, soft rim light, crisp HD detail, glossy vinyl sticker texture, premium commercial sticker rendering.
+
+${isPackMockupMode ? `MOCKUP ADD-ON:
+Also create a product mockup version by placing this completed same-character pose sticker sheet inside a clear glossy plastic sticker pack pouch.
+PACKAGE MOCKUP: ${selected["Package Mockup"]}
+WEBSITE MOCKUP LAYOUT: ${selected["Website Mockup Layout"]}
+STICKER PACK ANGLE / PLACEMENT: ${selected["Sticker Pack Angle / Placement"]}
+WEBSITE MOCKUP BACKGROUND: ${selected["Website Mockup Background"]}
+WEBSITE MOCKUP BACKGROUND COLOR MODE: ${websiteMockupBackgroundMode}
+WEBSITE MOCKUP BACKGROUND COLOR DIRECTION: ${websiteMockupBackgroundDirection}
+WEBSITE MOCKUP COMPOSITION RULES:
+- Treat Website Mockup Layout and Sticker Pack Angle / Placement as hard placement instructions, not notes.
+- If Website Mockup Layout says sticker pack left, large character right: place the completed sticker pack/pouch on the LEFT side and place ONE enlarged matching hero character on the RIGHT side.
+- The large character must match the locked character identity and selected glam details. Do not create a random new character.
+- Apply the selected Sticker Pack Angle / Placement to the sticker pack/pouch only. Example: slightly slanted left means the sticker pack leans/rotates slightly left like a product promo mockup.
+- Keep the large character separate from the sticker pack, fully visible, full-body when possible, and not covering the pack.
+- Keep the sticker pack readable, visible, and shaped like a finished website product mockup/ad graphic.
+HEADER CARD DESIGN: ${selected["Header Card Design"]}
+TOP CALLOUT BADGE: ${selected["Top Callout Badge"]}
+BOTTOM BRANDING BANNER: ${selected["Bottom Branding Banner"]}
+BOTTOM BRANDING BANNER TEXT: ${bottomBannerText || "none"}
+BOTTOM BANNER COLOR DIRECTION: ${bottomBannerColorDirection}
+Make the stickers visible through the packaging, keep plastic glare subtle, and keep the sheet readable.` : `NO PACKAGING RULE:
+Do not create a plastic pouch, header card, retail bag, hanging slot, or product packaging. This output is the printable sticker sheet only.`}
+
+ANTI-ASHY PREMIUM QUALITY LOCK:
+- Use rich saturated color, glossy highlights, crisp HD detail, and clean contrast.
+- Keep skin tones luminous and true-to-selection, never gray, dull, washed out, chalky, muddy, or ashy.
+- Use polished airbrushed shading, soft rim light, realistic specular shine, and high-definition sticker texture.
+- Add premium glossy vinyl finish, sharp edges, smooth gradients, and commercial product clarity.
+
+NEGATIVE:
+no random extra characters, no changing identity, no different faces, no different skin tones, no body swapping, no messy collage, no overlapping stickers, no unreadable text, no cropped stickers, no blurry face, no warped hands, no ashy skin, no gray skin, no chalky color, no muddy shadows, no dull lighting, no washed-out color
+${custom ? "\nCUSTOM DETAILS: " + custom : ""}${singleElementCustom ? "\nSINGLE ELEMENT CUSTOM DETAILS: " + singleElementCustom : ""}${categoryCustomDetails ? "\n\nCATEGORY CUSTOM DETAILS:\n" + categoryCustomDetails : ""}
+
+Final image: premium same-character pose sticker sheet with ${poseBuilderInfo.usableCount} custom pose variations, plus selected typography stickers and selected elements, thick white kiss-cut borders, glossy vinyl finish, clean printable layout${isPackMockupMode ? ", also shown as a clear glossy sticker pack mockup" : ""}.` : isStickerPackLayoutMode ? `Create a premium sticker pack layout with multiple separate sticker designs.
+
+
+This prompt is NOT for plastic packaging.
+This prompt is NOT for a retail pouch.
+This prompt is NOT for a product mockup.
+This prompt is for a clean sticker pack layout / sticker sheet only.
+
+PACK CHARACTER SOURCE: ${selected["Pack Character Source"]}
+UPLOADED CHARACTER COUNT: ${selected["Uploaded Character Count"]}
+CHARACTER PLACEMENT: ${selected["Character Placement In Pack"]}
+WEBSITE MOCKUP LAYOUT: ${selected["Website Mockup Layout"]}
+STICKER PACK ANGLE / PLACEMENT: ${selected["Sticker Pack Angle / Placement"]}
+WEBSITE MOCKUP BACKGROUND: ${selected["Website Mockup Background"]}
+WEBSITE MOCKUP BACKGROUND COLOR MODE: ${websiteMockupBackgroundMode}
+WEBSITE MOCKUP BACKGROUND COLOR DIRECTION: ${websiteMockupBackgroundDirection}
+
+SELECTED PACK ELEMENTS:
+${selectedPackElements}
+${uploadedPngRule}
+
+Required output:
+- Multiple separate sticker designs arranged neatly together.
+- No glossy plastic pouch.
+- No sealed bag.
+- No header card.
+- No hanging slot.
+- No product packaging.
+- Every sticker must have its own thick white kiss-cut border.
+- Keep characters, quotes, and accessories separated and easy to see.
+- Use a clean transparent background when possible.
+- Leave clear space around each sticker.
+- Make the full layout feel like a sellable digital sticker sheet or sticker bundle preview.
+
+CHARACTER STICKER: ${selected["Character Sticker"]}
+MALE CHARACTER STICKER: ${selected["Character Sticker - Guys"]}
+CHARACTER IDENTITY PRESET: ${identityName}${womenOnlyGlamBlock}${tattooBlock}
+POSE / ACTION: ${poseAction}
+MAIN QUOTE STICKER: ${selected["Main Center Quote Sticker"]}
+CUSTOM TYPOGRAPHY STICKER: ${selected["Custom Typography Sticker"]}
+STICKER ARRANGEMENT: ${selected["Sticker Arrangement"]}
+BACKING COLOR: ${selected["Backing Color"]}
+FINISH QUALITY: ${selected["Finish Quality"]}
+
+Sticker pack layout rules:
+- Add ONLY the selected pack elements listed above.
+- If no pack elements are selected, use the chosen character, matched accessory, and quote only.
+- If Custom Typography Sticker is not none, create it as a separate kiss-cut quote/word sticker in the layout.
+- Use the text typed in the Custom Typography Sticker details box as the exact sticker wording.
+- Do not use Custom Typography Sticker as a title, headline, or package header.
+- Keep text large, sharp, correctly spelled, glossy, and readable.
+- Keep all character faces, outfits, poses, and sticker details clear.
+- Do not overlap stickers.
+- Do not clutter the sheet.
+- Use wide spacing and premium Etsy-style clarity.
+- Make all stickers glossy vinyl with thick white borders and soft sticker shadows.
+- Use rich saturated color, luminous highlights, crisp HD detail, smooth gradients, clean contrast, and polished commercial sticker rendering.
+- Keep skin tones true-to-selection, warm, dimensional, and never ashy, gray, chalky, washed out, muddy, or dull.
+
+ANTI-ASHY PREMIUM QUALITY LOCK:
+- Use rich saturated color, glossy highlights, crisp HD detail, and clean contrast.
+- Keep skin tones luminous and true-to-selection, never gray, dull, washed out, chalky, muddy, or ashy.
+- Use polished airbrushed shading, soft rim light, realistic specular shine, and high-definition sticker texture.
+- Add premium glossy vinyl finish, sharp edges, smooth gradients, and commercial product clarity.
+
+NEGATIVE:
+no plastic packaging, no pouch, no product mockup, no header card, no hanging tab, no sealed bag, no retail display, no random extras, no overlapping stickers, no unreadable text, no ashy skin, no gray skin, no chalky color, no muddy shadows, no dull lighting, no washed-out color
+${custom ? "\nCUSTOM DETAILS: " + custom : ""}${singleElementCustom ? "\nSINGLE ELEMENT CUSTOM DETAILS: " + singleElementCustom : ""}${categoryCustomDetails ? "\n\nCATEGORY CUSTOM DETAILS:\n" + categoryCustomDetails : ""}
+
+Final image: clean premium sticker pack layout, multiple separated glossy vinyl stickers with thick white kiss-cut borders, transparent PNG-style background, crisp Etsy-ready sticker bundle preview.` : (!hasCreationMode) ? `Create a premium design prompt using only the selected categories.
+
+SELECTED HEADER CARD DESIGN: ${selected["Header Card Design"]}
+CUSTOM TYPOGRAPHY STICKER: ${selected["Custom Typography Sticker"]}
+TOP CALLOUT BADGE: ${selected["Top Callout Badge"]}
+BOTTOM BRANDING BANNER: ${selected["Bottom Branding Banner"]}
+BOTTOM BRANDING BANNER TEXT: ${bottomBannerText || "none"}
+BOTTOM BANNER COLOR MODE: ${bottomBannerColorMode}
+BOTTOM BANNER COLOR DIRECTION: ${bottomBannerColorDirection}
+CHARACTER STICKER: ${selected["Character Sticker"]}
+MALE CHARACTER STICKER: ${selected["Character Sticker - Guys"]}
+SKIN TONE: ${selected["Skin Tone"]}
+TATTOO: ${selected["Tattoo"]}
+BODY TYPE - GIRLS: ${selected["Body Type - Girls"]}
+BODY TYPE - GUYS: ${selected["Body Type - Guys"]}
+FACE STYLE - GIRLS: ${selected["Face Style - Girls"]}
+HAIRSTYLE - GIRLS: ${selected["Hairstyle - Girls"]}
+MAKEUP - GIRLS: ${selected["Makeup - Girls"]}
+BEAUTY MARKS - GIRLS: ${selected["Beauty Marks - Girls"]}
+EARRINGS - GIRLS: ${selected["Earrings - Girls"]}
+NAILS - GIRLS: ${selected["Nails - Girls"]}
+EYEBROWS - GIRLS: ${selected["Eyebrows - Girls"]}
+LASHES - GIRLS: ${selected["Lashes - Girls"]}
+FACE STYLE - GUYS: ${selected["Face Style - Guys"]}
+HAIRSTYLE - GUYS: ${selected["Hairstyle - Guys"]}
+POSE / ACTION: ${poseAction}
+GUY POSE / ACTION: ${selected["Guy Pose / Action"]}
+SELECTED PACK ELEMENTS:
+${selectedPackElements}
+OUTFIT - GIRLS: ${selected["Outfit - Girls"]}
+OUTFIT - GUYS: ${selected["Outfit - Guys"]}
+
+CUSTOM DETAILS: ${custom || "none"}
+
+Final output should follow the selected header and selected categories only. If an option is set to none, ignore it. Keep the style ultra-glossy, clean, high-definition, richly saturated, luminous, sticker-ready, and premium. Skin tones must stay true-to-selection, never ashy, gray, chalky, washed out, muddy, or dull.` : `${packOpeningLine}
+
+PACK CHARACTER SOURCE: ${selected["Pack Character Source"]}
+UPLOADED CHARACTER COUNT: ${selected["Uploaded Character Count"]}
+CHARACTER PLACEMENT: ${selected["Character Placement In Pack"]}
+WEBSITE MOCKUP LAYOUT: ${selected["Website Mockup Layout"]}
+STICKER PACK ANGLE / PLACEMENT: ${selected["Sticker Pack Angle / Placement"]}
+WEBSITE MOCKUP BACKGROUND: ${selected["Website Mockup Background"]}
+WEBSITE MOCKUP BACKGROUND COLOR MODE: ${websiteMockupBackgroundMode}
+WEBSITE MOCKUP BACKGROUND COLOR DIRECTION: ${websiteMockupBackgroundDirection}
+
+SELECTED PACK ELEMENTS:
+${selectedPackElements}
+${uploadedPngRule}
+The final image must follow the selected header card design, title style, character stickers, and selected sticker elements. Create a clear glossy plastic sticker package with a bold header card at the top and all selected sticker elements displayed clearly inside the pouch.
+
+PACKAGE MOCKUP: ${selected["Package Mockup"]}
+HEADER CARD DESIGN: ${selected["Header Card Design"]}
+CUSTOM TYPOGRAPHY STICKER: ${selected["Custom Typography Sticker"]}
+TOP CALLOUT BADGE: ${selected["Top Callout Badge"]}
+BOTTOM BRANDING BANNER: ${selected["Bottom Branding Banner"]}
+BOTTOM BRANDING BANNER TEXT: ${bottomBannerText || "none"}
+BOTTOM BANNER COLOR MODE: ${bottomBannerColorMode}
+BOTTOM BANNER COLOR DIRECTION: ${bottomBannerColorDirection}
+SINGLE ELEMENT FOCUS: ${chosenElement || "none"}
+CHARACTER STICKER: ${selected["Character Sticker"]}
+MALE CHARACTER STICKER: ${selected["Character Sticker - Guys"]}
+CHARACTER IDENTITY PRESET: ${identityName}
+FEMALE FACE STYLE: ${selected["Face Style - Girls"]}
+FEMALE HAIRSTYLE: ${selected["Hairstyle - Girls"]}
+MAKEUP - GIRLS: ${selected["Makeup - Girls"]}
+BEAUTY MARKS - GIRLS: ${selected["Beauty Marks - Girls"]}
+EARRINGS - GIRLS: ${selected["Earrings - Girls"]}
+NAILS - GIRLS: ${selected["Nails - Girls"]}
+EYEBROWS - GIRLS: ${selected["Eyebrows - Girls"]}
+LASHES - GIRLS: ${selected["Lashes - Girls"]}
+MALE FACE STYLE: ${selected["Face Style - Guys"]}
+MALE HAIRSTYLE: ${selected["Hairstyle - Guys"]}
+POSE / ACTION: ${poseAction}
+MAIN QUOTE STICKER: ${selected["Main Center Quote Sticker"]}
+STICKER ARRANGEMENT: ${selected["Sticker Arrangement"]}
+BACKING COLOR: ${selected["Backing Color"]}
+FINISH QUALITY: ${selected["Finish Quality"]}
+
+Website mockup layout rules:
+- If Website Mockup Layout is not none, place the completed sticker pack product using that exact left/right/center layout direction.
+- If Sticker Pack Angle / Placement is not none, rotate or position the sticker pack using that exact angle/placement direction.
+- If Website Mockup Background is not none, use it only as the product mockup background behind the sticker pack and character.
+- Website mockup background color rule: ${websiteMockupBackgroundMode}. If set to auto match, match the design palette. If set to custom color or gradient, use this exact color direction: ${websiteMockupBackgroundDirection}.
+- Do not change the selected header card design because of the background choice.
+
+Sticker pack build rules:
+
+CLEAN ETSY LAYOUT MODE (AUTO-ENABLED):
+- Use wide spacing between all stickers
+- Maximum 6–8 characters only (do not exceed)
+- All characters must be fully visible with no overlap
+- Keep layout minimal and premium
+- Use only 2–4 small accessory icons max unless the user selected more elements on purpose
+- Do not clutter the design
+- Do not stack stickers
+- Keep clear empty space around each element
+- Ensure readability at thumbnail size
+
+- Top header text must follow the Header Card Design only. Do not use Custom Typography Sticker as the package headline.
+- If Top Callout Badge is not none, add a clean product-count callout badge near the top of the design, like a circle or badge that tells buyers how many stickers/images are included. Keep the badge text large, centered, correctly spelled, and readable at Etsy thumbnail size.
+- If Bottom Branding Banner is not none, add a clean footer-style product banner at the very bottom of the design like the reference example. This is the bottom label/branding strip, not the top header card.
+- If Bottom Branding Banner Text is provided, use that exact wording inside the bottom banner: ${bottomBannerText || "none"}.
+- Bottom banner color rule: ${bottomBannerColorMode}. If set to auto match, match the design palette. If set to custom color or gradient, use this exact color direction: ${bottomBannerColorDirection}.
+- Keep the bottom branding banner text large, centered, correctly spelled, high-contrast, and readable at Etsy thumbnail size.
+- If Custom Typography Sticker is not none, create it as a separate kiss-cut quote/word sticker inside the sticker pack, with a thick white sticker border and soft sticker shadow.
+- Use the custom text typed in the Custom Typography Sticker details box as the exact sticker wording. Do not use it as the top headline, package title, or header card text.
+- Keep the custom typography sticker large, sharp, correctly spelled, glossy, and readable at Etsy thumbnail size.
+- Use glossy bubble font, chrome, glitter, graffiti, black outlines, white highlights, and bold shadowing only on the custom typography sticker when selected.
+- Place the selected character artwork inside the package as finished stickers.
+- Keep every selected character clearly visible, crisp, and recognizable.
+- Do not cover faces, outfits, poses, or important character details with glare or other stickers.
+- Add ONLY the selected pack elements listed above. Do not add random extras that were not selected.
+- Make all added stickers kiss-cut with thick white borders and soft sticker shadows.
+- Make the package look like real clear plastic with crinkles, shine streaks, sealed edges, and realistic reflections.
+- Keep plastic glare subtle so the selected characters and text stay readable.
+- Keep the product centered for a 4:5 Etsy thumbnail.
+- Use rich saturated color, clean contrast, crisp HD detail, glossy vinyl finish, luminous highlights, and polished commercial product lighting.
+- Keep all skin tones true-to-selection, warm, dimensional, and never ashy, gray, chalky, washed out, muddy, or dull.
+- Do not crop the package. Do not hide the title. Do not blur the sticker text.
+- Do not generate new random characters unless Pack Character Source says generator-created prompts only.
+${custom ? "\nCUSTOM DETAILS: " + custom : ""}${categoryCustomDetails ? "\n\nCATEGORY CUSTOM DETAILS:\n" + categoryCustomDetails : ""}
+
+Final style: ultra-glossy, high-definition, clean premium Etsy-style sticker-pack mockup with wide spacing, minimal layout, high clarity, rich saturated color, luminous true-to-selection skin tones, polished airbrushed shading, glossy vinyl sticker finish, crisp edges, smooth gradients, commercial product lighting, vibrant hot pink, purple, black, white, and metallic gold, Etsy-ready, high-resolution product photography, 4:5 vertical aspect ratio. No ashy, gray, chalky, washed out, muddy, dull, low-contrast, blurry, or faded output.`;
+
+  setOutputText("promptBox", prompt);
+}
+
+
+function getGeneratorContext(){
+  const selected = {};
+  Object.keys(categories).forEach(name => selected[name] = getVal(name));
+  const prompt = getOutputText("promptBox").trim();
+  const selectedPackElements = formatSelectedPackElements();
+  const vibe = "premium sticker pack";
+  const guyCharacter = selected["Character Sticker - Guys"] && selected["Character Sticker - Guys"] !== "none" ? selected["Character Sticker - Guys"] : "";
+  const girlCharacter = selected["Character Sticker"] && selected["Character Sticker"] !== "none" ? selected["Character Sticker"] : "";
+  const character = guyCharacter || girlCharacter || "selected sticker character";
+  const pose = guyCharacter && selected["Guy Pose / Action"] && selected["Guy Pose / Action"] !== "none" ? selected["Guy Pose / Action"] : (selected["Pose / Action"] && selected["Pose / Action"] !== "none" ? selected["Pose / Action"] : "clean showcase pose");
+  const header = selected["Header Card Design"] && selected["Header Card Design"] !== "none" ? selected["Header Card Design"] : "selected premium header card";
+  const titleStyle = selected["Custom Typography Sticker"] && selected["Custom Typography Sticker"] !== "none" ? selected["Custom Typography Sticker"] : "clean readable sticker-pack title style";
+  const packageMockup = selected["Package Mockup"] && selected["Package Mockup"] !== "none" ? selected["Package Mockup"] : "glossy sticker pack packaging";
+  const backing = selected["Backing Color"] && selected["Backing Color"] !== "none" ? selected["Backing Color"] : "clean premium backing";
+  const finish = selected["Finish Quality"] && selected["Finish Quality"] !== "none" ? selected["Finish Quality"] : "ultra glossy high-definition finish";
+  const quote = selected["Main Center Quote Sticker"] && selected["Main Center Quote Sticker"] !== "none" ? selected["Main Center Quote Sticker"] : "premium quote sticker";
+  const bottomBanner = selected["Bottom Branding Banner"] && selected["Bottom Branding Banner"] !== "none" ? selected["Bottom Branding Banner"] : "no bottom branding banner selected";
+  const accessory = selectedPackElements && !selectedPackElements.includes("none selected") ? selectedPackElements : "selected sticker accessories";
+  const outfit = guyCharacter ? (selected["Outfit - Guys"] && selected["Outfit - Guys"] !== "none" ? selected["Outfit - Guys"] : "coordinated guy outfit") : (selected["Outfit - Girls"] && selected["Outfit - Girls"] !== "none" ? selected["Outfit - Girls"] : "coordinated glam outfit");
+  const promptPreview = prompt && !prompt.includes("Click “") ? prompt.slice(0, 450) : "Generate the main prompt first, then use this content as the source.";
+  return {selected, prompt, promptPreview, selectedPackElements, vibe, guyCharacter, girlCharacter, character, pose, header, titleStyle, packageMockup, backing, finish, quote, bottomBanner, accessory, outfit};
+}
+
+function generateVideoScript(){
+  const ctx = getGeneratorContext();
+  const isPack = (ctx.selected["Creation Mode"] || "").toLowerCase().includes("pack") || (ctx.selected["Package Mockup"] || "none") !== "none";
+  const hookOptions = [
+    `POV: your sticker pack finally looks premium enough to sell.`,
+    `Stop scrolling — this ${ctx.vibe} sticker pack is giving main product energy.`,
+    `This is what happens when cute stickers get a luxury upgrade.`,
+    `When the packaging looks this glossy, the product does half the selling.`
+  ];
+  const actionOptions = [
+    `Start with a tight close-up on the ${ctx.header}, then slow zoom across the ${ctx.titleStyle}. Pan over ${ctx.character}, show the ${ctx.pose}, then flash the selected sticker elements and end on the full ${ctx.packageMockup}.`,
+    `Open on plastic glare and sparkle highlights. Quick cuts reveal ${ctx.character}, ${ctx.accessory}, and ${ctx.quote}. End with the full sticker pack centered for an Etsy-style thumbnail moment.`,
+    `Use a glossy reveal: slide in the pack, shimmer over the header, zoom into the character sticker, then snap to the full product with a bold callout.`
+  ];
+  const voiceOptions = [
+    `This sticker pack is not basic — it’s glossy, clean, and ready to sell.`,
+    `Your digital product just got the premium packaging treatment.`,
+    `Cute characters, clear elements, and a product mockup that actually looks shop-ready.`,
+    `This is the kind of sticker pack that makes people stop, click, and add to cart.`
+  ];
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+  const video = `8-SECOND VIDEO SCRIPT\n\nVIBE:\n${ctx.vibe}\n\nHOOK (0–2 seconds):\n${pick(hookOptions)}\n\nVISUAL ACTION (2–6 seconds):\n${pick(actionOptions)}\n\nVOICEOVER (fits 8 seconds):\n"${pick(voiceOptions)}"\n\nON-SCREEN TEXT:\n${isPack ? "Premium sticker pack mockup" : "Premium sticker design"}\nGlossy • HD • Ready to post\n\nENDING CTA (6–8 seconds):\nShow the final design centered with soft sparkle movement. Add text: “Create yours today” or “Link in bio”.\n\nSOURCE PROMPT SNAPSHOT:\n${ctx.promptPreview}`;
+  setOutputText("videoBox", video);
+}
+
+function generateMarketingContent(){
+  const ctx = getGeneratorContext();
+  const selectedElementsClean = ctx.selectedPackElements.replace(/- none selected/g, "selected sticker elements");
+  const captionHooks = [
+    `This ${ctx.vibe} sticker pack is giving premium product energy.`,
+    `Glossy stickers, clean packaging, and a mockup that looks ready to sell.`,
+    `If your digital products need to look more expensive, start here.`,
+    `Sticker packs should look cute, clear, and clickable — this one understood the assignment.`
+  ];
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+  const hashtags = ["#stickerpack", "#digitalproducts", "#etsyshop", "#stickerdesign", "#aiprompts", "#contentcreator", "#smallbusiness", "#printabledesign", "#productmockup", "#glossystickers", "#digitalcreator", "#creativebusiness"].join(" ");
+  const marketing = `MARKETING CONTENT\n\nCAPTION:\n${pick(captionHooks)}\n\nThis design uses ${ctx.header}, ${ctx.titleStyle}, ${ctx.character}, ${ctx.pose}, and ${ctx.finish} to create a sticker product that feels polished, high-definition, and shop-ready.\n\nSHORT PROMO COPY:\nCreate premium sticker pack prompts with glossy packaging, clear character placement, readable header designs, and matching sticker elements. Perfect for digital sellers, Etsy mockups, social media promos, printable sticker ideas, and product previews.\n\nWHAT TO HIGHLIGHT:\n- Vibe: ${ctx.vibe}\n- Header: ${ctx.header}\n- Character: ${ctx.character}\n- Outfit: ${ctx.outfit}\n- Pose: ${ctx.pose}\n- Package: ${ctx.packageMockup}\n- Finish: ${ctx.finish}\n\nSELECTED ELEMENTS TO MENTION:\n${selectedElementsClean}\n\nCTA OPTIONS:\n1. Create your own premium sticker pack today.\n2. Grab the prompt generator and start designing scroll-stopping sticker packs.\n\nHASHTAGS:\n${hashtags}\n\nETSY / PRODUCT DESCRIPTION BLURB:\nThis premium sticker pack prompt generator helps you create glossy, high-definition sticker pack mockups with custom characters, header cards, packaging styles, sticker elements, quotes, outfits, poses, and finish details. Use it to build product mockups, printable sticker ideas, digital sticker packs, social media promos, and shop-ready visuals without starting from scratch.`;
+  setOutputText("marketingBox", marketing);
+}
+
+
+
+function generateCustomGPTContent(){
+  const ctx = getGeneratorContext();
+  const adaptive = ctx.selected["Adaptive / Disability Representation"] && ctx.selected["Adaptive / Disability Representation"] !== "none" ? ctx.selected["Adaptive / Disability Representation"] : "none selected";
+  const layout = ctx.selected["Website Mockup Layout"] && ctx.selected["Website Mockup Layout"] !== "none" ? ctx.selected["Website Mockup Layout"] : "use selected layout only when provided";
+  const angle = ctx.selected["Sticker Pack Angle / Placement"] && ctx.selected["Sticker Pack Angle / Placement"] !== "none" ? ctx.selected["Sticker Pack Angle / Placement"] : "front-facing product placement unless selected otherwise";
+  const customGpt = `CUSTOM GPT SETUP
+
+GPT NAME IDEA:
+Premium Sticker Pack Prompt Builder
+
+GPT DESCRIPTION:
+Creates premium, glossy sticker pack prompts, same-character pose packs, printable sticker sheets, product mockups, website mockups, marketing copy, short video scripts, and Suno music prompts using the user's selected sticker generator categories.
+
+CUSTOM GPT INSTRUCTIONS:
+You are a premium sticker pack prompt assistant for digital product creators. Your job is to turn selected generator options into clear, high-quality AI image prompts and product content. Always keep the selected character identity consistent. Use only the user's selected categories. Do not add random details unless the user asks for creative help.
+
+CORE RULES:
+1. Keep the same character identity locked across every sticker variation.
+2. Preserve skin tone, face, body type, hairstyle, age impression, and overall style.
+3. If the user selects a girl character, apply women-only glam details only to that girl character.
+4. If the user selects a guy character, do not add women-only details like lashes, nails, makeup, earrings, or heels unless the user directly asks.
+5. If adaptive/disability representation is selected, coordinate every pose with it.
+6. Keep all stickers fully visible with thick white kiss-cut borders.
+7. Keep typography large, readable, and correctly spelled.
+8. Do not create random extra characters.
+9. Do not change the selected package, header card, badge, banner, or layout unless requested.
+10. Use plain text output only.
+
+ADAPTIVE / DISABILITY RULE:
+Selected adaptive/disability option: ${adaptive}
+When adaptive/disability representation is not "none," every pose slot must include this line:
+Adaptive pose coordination: match this pose to the selected Adaptive / Disability Representation. Keep mobility aids, prosthetics, hearing aids, service dog, seated positioning, or support props consistent and natural for this character.
+
+WEBSITE MOCKUP RULE:
+Website mockup layout: ${layout}
+Sticker pack angle / placement: ${angle}
+If a website mockup layout is selected, clearly place the completed sticker pack or pouch according to that layout. Apply the selected angle to the sticker pack only. Keep the large matching character separate and clearly visible.
+
+DEFAULT OUTPUT SECTIONS:
+- Main AI Image Prompt
+- Negative Prompt
+- Optional Website Mockup Add-On
+- Optional Product Description
+- Optional Video Script
+- Optional Marketing Copy
+- Optional Suno Prompt
+
+CURRENT GENERATOR CONTEXT:
+- Character: ${ctx.character}
+- Pose: ${ctx.pose}
+- Outfit: ${ctx.outfit}
+- Header: ${ctx.header}
+- Package: ${ctx.packageMockup}
+- Quote: ${ctx.quote}
+- Finish: ${ctx.finish}
+- Selected pack elements: ${ctx.selectedPackElements}
+
+STARTER CONVERSATION MESSAGE:
+Tell me what kind of sticker pack, character, mockup, or product prompt you want to build. I will turn your selections into a clean premium prompt with strong character consistency, glossy sticker details, and sellable product mockup instructions.`;
+  setOutputText("customGptBox", customGpt);
+}
+
+function generateSunoMusic(){
+  const ctx = getGeneratorContext();
+  const isGuy = !!ctx.guyCharacter;
+  const isSport = /basketball|football|baseball|soccer|tennis|volleyball|gym|fitness|MVP|champion|game day/i.test(ctx.vibe + " " + ctx.character + " " + ctx.selectedPackElements);
+  const isParty = /party|birthday|celebration|VIP|club|disco|cheers/i.test(ctx.vibe + " " + ctx.character + " " + ctx.selectedPackElements);
+  const isLuxury = /luxury|glam|bougie|gold|designer|premium|gloss/i.test(ctx.vibe + " " + ctx.header + " " + ctx.finish);
+  const genre = isSport ? "upbeat hip-hop / stadium chant / bass-heavy pop" : isParty ? "dance-pop / club bounce / glossy party anthem" : isLuxury ? "glossy pop-R&B / luxury trap-pop / boutique jingle" : "catchy pop / creator anthem / upbeat promo jingle";
+  const mood = isGuy ? "confident, bold, cool, clean, main-character energy" : "glossy, stylish, confident, cute, high-energy, premium";
+  const title = `${ctx.vibe} Sticker Pack Anthem`;
+  const shortHook = isSport ? "Game day glow, champion mode" : isParty ? "Big sparkle, big party, big mood" : isLuxury ? "Glossy look, premium touch" : "Cute design, big product energy";
+  const lyrics30 = `[Intro]\n${shortHook}\n\n[Verse]\nPack it clean, make it shine\nSticker dreams with a premium design\n${ctx.character} in a ${ctx.pose}\nEvery little detail makes the whole thing glow\n\n[Hook]\nGlossy, crisp, HD bright\nSticker pack looking like money tonight\nClick, post, sell, repeat\nThis design got that boutique heat`;
+  const lyrics60 = `[Intro]\n${shortHook}\n\n[Verse 1]\nOpen the pack, let the colors pop\nGlossy little details make the scrolling stop\n${ctx.header} with a clean title shine\n${ctx.character} got the whole vibe aligned\n\n[Pre-Chorus]\nCute but polished, clear and bold\nPink, gold, black, and a story sold\nEvery sticker placed just right\nReady for the shop and ready for the light\n\n[Hook]\nGlossy, crisp, HD bright\nSticker pack looking like money tonight\nClick, post, sell, repeat\nThis design got that boutique heat\n\n[Outro]\nPremium look, no basic mood\nSticker pack magic, styled so good`;
+  const suno = `SUNO MUSIC PROMPT\n\nSONG TITLE:\n${title}\n\nSTYLE / GENRE:\n${genre}\n\nMOOD:\n${mood}\n\nVOCAL DIRECTION:\nCatchy female or male vocal depending on selected character, polished commercial tone, confident delivery, clean pronunciation, short memorable hook, social-media-ready energy.\n\nPRODUCTION NOTES:\nGlossy high-definition pop mix, punchy drums, bright synth sparkle, clean bass, boutique ad feel, upbeat rhythm, TikTok/Reels friendly, no muddy vocals, no dull mix, no low-quality audio.\n\nJINGLE VERSION (10–15 seconds):\n${shortHook}\nGlossy sticker pack, ready to sell\nPremium look, you know it hit well\n\n30-SECOND LYRICS:\n${lyrics30}\n\n1-MINUTE LYRICS:\n${lyrics60}\n\nINSTRUMENTAL VERSION PROMPT:\n${genre}, ${mood}, glossy commercial instrumental, bright synth sparkle, punchy drums, clean bass, playful sticker-shop energy, premium boutique ad soundtrack, no vocals.\n\nSOURCE DETAILS USED:\n- Vibe: ${ctx.vibe}\n- Character: ${ctx.character}\n- Pose: ${ctx.pose}\n- Outfit: ${ctx.outfit}\n- Header: ${ctx.header}\n- Finish: ${ctx.finish}\n- Quote: ${ctx.quote}`;
+  setOutputText("sunoBox", suno);
+}
+
+function safeCopyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).catch(() => fallbackCopyText(text));
+  }else{
+    fallbackCopyText(text);
+  }
+}
+
+function fallbackCopyText(text){
+  const temp = document.createElement("textarea");
+  temp.value = text;
+  temp.setAttribute("readonly", "");
+  temp.style.position = "fixed";
+  temp.style.left = "-9999px";
+  document.body.appendChild(temp);
+  temp.select();
+  try{ document.execCommand("copy"); }catch(e){}
+  document.body.removeChild(temp);
+}
+
+function copyBoxText(id){
+  copyPlainTextOnly(getOutputText(id));
+}
+
+function randomizeOptions(){
+  const manualOnlyCategories = [
+    "Creation Mode",
+    "Pack Character Source",
+    "Uploaded Character Count",
+    "Number of Character Variations"
+  ];
+
+  const girlOnlyCategories = [
+    "Character Sticker",
+    "Body Type - Girls",
+    "Face Style - Girls",
+    "Hairstyle - Girls",
+    "Makeup - Girls",
+    "Beauty Marks - Girls",
+    "Earrings - Girls",
+    "Nails - Girls",
+    "Eyebrows - Girls",
+    "Lashes - Girls",
+    "Pose / Action",
+    "Outfit - Girls"
+  ];
+
+  const guyOnlyCategories = [
+    "Character Sticker - Guys",
+    "Body Type - Guys",
+    "Face Style - Guys",
+    "Hairstyle - Guys",
+    "Guy Pose / Action",
+    "Outfit - Guys"
+  ];
+
+  function isLocked(categoryName){
+    return !!locks[categoryName];
+  }
+
+  function setToNone(categoryName){
+    const select = document.getElementById(safeId(categoryName));
+    if(select && !isLocked(categoryName)) select.value = "none";
+  }
+
+  function randomOptionForCategory(categoryName, lane){
+    const opts = categories[categoryName];
+    if(!opts || opts.length <= 1) return "none";
+
+    // Keep gendered headers aligned with the active lane.
+    // This stops a guy character from pairing with a women's header, and vice versa.
+    let filtered = opts.slice(1);
+    if(categoryName === "Header Card Design"){
+      filtered = filtered.filter(opt => {
+        const val = String(opt).toLowerCase();
+        if(lane === "guy") return !val.includes("women's") && !val.includes("woman") && !val.includes("girl");
+        if(lane === "girl") return !val.includes("men's") && !val.includes("male") && !val.includes("guy");
+        return true;
+      });
+    }
+
+    if(!filtered.length) filtered = opts.slice(1);
+    return filtered[Math.floor(Math.random() * filtered.length)];
+  }
+
+  // Randomize picks ONE lane first on every click unless the user locks a lane.
+  // It no longer reads old dropdown values from the last random click, because that caused it to get stuck on female.
+  let activeLane = Math.random() < 0.5 ? "girl" : "guy";
+
+  const girlCharacterSelect = document.getElementById(safeId("Character Sticker"));
+  const guyCharacterSelect = document.getElementById(safeId("Character Sticker - Guys"));
+  const girlLockedWithValue = isLocked("Character Sticker") && girlCharacterSelect && girlCharacterSelect.value && girlCharacterSelect.value !== "none";
+  const guyLockedWithValue = isLocked("Character Sticker - Guys") && guyCharacterSelect && guyCharacterSelect.value && guyCharacterSelect.value !== "none";
+
+  if(girlLockedWithValue && !guyLockedWithValue) activeLane = "girl";
+  if(guyLockedWithValue && !girlLockedWithValue) activeLane = "guy";
+
+  // Hard clear the opposite lane before picking new random values.
+  const opposite = activeLane === "girl" ? guyOnlyCategories : girlOnlyCategories;
+  opposite.forEach(setToNone);
+
+  Object.keys(categories).forEach(name => {
+    if(isLocked(name)) return;
+    if(manualOnlyCategories.includes(name)) return;
+
+    // Prevent boy/girl mashups from Randomize.
+    if(activeLane === "girl" && guyOnlyCategories.includes(name)) return;
+    if(activeLane === "guy" && girlOnlyCategories.includes(name)) return;
+
+    const select = document.getElementById(safeId(name));
+    if(!select) return;
+    if(!categories[name] || categories[name].length <= 1) return;
+
+    select.value = randomOptionForCategory(name, activeLane);
+  });
+
+  // Safety clear again after randomizing in case any dynamic UI repopulated values.
+  opposite.forEach(setToNone);
+
+  updateSmartPoseDropdowns(true);
+  applyCreationModeUI();
+  generatePrompt();
+}
+
+function copyPrompt(){
+  copyPlainTextOnly(getOutputText("promptBox"));
+}
+
+function getSavedPrompts(){
+  try{
+    return JSON.parse(localStorage.getItem("glamStickerElementPrompts") || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function setSavedPrompts(saved){
+  try{
+    localStorage.setItem("glamStickerElementPrompts", JSON.stringify(saved));
+  }catch(e){}
+}
+
+function savePrompt(){
+  const box = document.getElementById("promptBox");
+  if(!box) return;
+  const text = getOutputText("promptBox");
+  let saved = getSavedPrompts();
+  saved.unshift({date:new Date().toLocaleString(), text});
+  saved = saved.slice(0,20);
+  setSavedPrompts(saved);
+  renderHistory();
+}
+
+function renderHistory(){
+  const saved = getSavedPrompts();
+  const box = document.getElementById("historyBox");
+  if(!box) return;
+  if(!saved.length){ box.textContent = "No saved prompts yet."; return; }
+  box.innerHTML = saved.map(item=>`
+    <div class="card" style="margin:10px 0">
+      <strong>${item.date}</strong>
+      <pre>${item.text.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</pre>
+      <button onclick="safeCopyText(${JSON.stringify(item.text)})">Copy Saved Prompt</button>
+    </div>
+  `).join("");
+}
+
+function clearAll(){
+  Object.keys(categories).forEach(name => document.getElementById(safeId(name)).value = "none");
+  if(document.getElementById("custom")) document.getElementById("custom").value = "";
+  if(document.getElementById("singleElementCustom")) document.getElementById("singleElementCustom").value = "";
+  if(document.getElementById("customOutfit")) document.getElementById("customOutfit").value = "";
+  document.querySelectorAll("input[data-element-cat]").forEach(cb => cb.checked = false);
+  document.querySelectorAll("input[data-pose-cat]").forEach(cb => cb.checked = false);
+  document.querySelectorAll(".categoryCustom").forEach(box => box.value = "");
+  if(document.getElementById("bottomBannerColorMode")) document.getElementById("bottomBannerColorMode").value = "auto match";
+  if(document.getElementById("bottomBannerCustomColors")) document.getElementById("bottomBannerCustomColors").classList.add("hidden");
+  if(document.getElementById("websiteMockupBackgroundMode")) document.getElementById("websiteMockupBackgroundMode").value = "auto match";
+  if(document.getElementById("websiteMockupBackgroundCustomColors")) document.getElementById("websiteMockupBackgroundCustomColors").classList.add("hidden");
+  setOutputText("promptBox", "Choose Creation Mode, then click “Generate Prompt”.");
+  applyCreationModeUI();
+  if(document.getElementById("videoBox")) setOutputText("videoBox", "Click “Generate Video Script”.");
+  if(document.getElementById("marketingBox")) setOutputText("marketingBox", "Click “Generate Marketing”.");
+  if(document.getElementById("sunoBox")) setOutputText("sunoBox", "Click “Generate Suno Music”.");
+  if(document.getElementById("customGptBox")) setOutputText("customGptBox", "Click “Generate Custom GPT”.");
+}
+renderHistory();
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderElementControls();
+  renderPosePackControls();
+  placePoseBuilderNextToCreationMode();
+  initSmartPoseFilters();
+  applyCreationModeUI();
+  updatePoseSlotVisibility();
+  const genBtn = document.getElementById("generateBtn");
+  if (genBtn) {
+    genBtn.addEventListener("click", function(e){
+      e.preventDefault();
+      generatePrompt();
+    });
+  }
+});
+</script>
+</body>
+</html>
